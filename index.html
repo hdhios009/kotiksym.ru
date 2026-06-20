@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Курс скорочтения для детей — КотиксУМ</title>
+  <meta name="description" content="Курс скорочтения для детей от 6 до 12 лет. Научим читать быстро и понимать прочитанное. Планерная, Москва.">
+  <meta property="og:title" content="Курс скорочтения для детей — КотиксУМ">
+  <meta property="og:description" content="Научим читать быстро и понимать прочитанное. Первая диагностика — бесплатно!">
+  <meta property="og:image" content="https://kotiksym.ru/images/hero-main.jpg">
+  <meta property="og:url" content="https://kotiksym.ru/">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #1a1a1a; line-height: 1.6; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    
+    /* Header */
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; flex-wrap: wrap; gap: 15px; }
+    .header-logo { display: flex; align-items: center; gap: 12px; }
+    .header-logo img { height: 50px; border-radius: 10px; }
+    .header-logo span { font-size: 24px; font-weight: 700; color: #6C63FF; }
+    .header-contacts { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .header-phone { font-size: 20px; font-weight: 700; color: #1a1a1a; text-decoration: none; }
+    .header-tg { display: inline-flex; align-items: center; gap: 8px; background: #6C63FF; color: white; padding: 10px 24px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 16px; }
+    
+    /* Hero */
+    .hero { display: flex; align-items: center; gap: 40px; padding: 60px 0; flex-wrap: wrap; }
+    .hero-content { flex: 1; min-width: 300px; }
+    .hero-content h1 { font-size: 42px; line-height: 1.2; margin-bottom: 20px; color: #2d2d2d; }
+    .hero-content h1 span { color: #6C63FF; }
+    .hero-content p { font-size: 18px; color: #666; margin-bottom: 30px; }
+    .hero-image { flex: 1; min-width: 300px; text-align: center; }
+    .hero-image img { max-width: 100%; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    .hero-badge { display: inline-block; background: #FF6B6B; color: white; padding: 12px 28px; border-radius: 30px; font-weight: 700; font-size: 18px; margin-bottom: 20px; }
+    .hero-features { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; }
+    .hero-feature { background: #f5f3ff; padding: 12px 20px; border-radius: 12px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+    .btn { display: inline-block; padding: 16px 40px; background: #6C63FF; color: white; text-decoration: none; border-radius: 30px; font-weight: 700; font-size: 18px; border: none; cursor: pointer; transition: 0.3s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(108,99,255,0.3); }
+    .btn-whatsapp { background: #25D366; }
+    .btn-whatsapp:hover { box-shadow: 0 10px 20px rgba(37,211,102,0.3); }
+    
+    /* Sections */
+    section { padding: 60px 0; }
+    .section-title { font-size: 32px; margin-bottom: 40px; text-align: center; position: relative; }
+    .section-title:after { content: ''; display: block; width: 60px; height: 4px; background: #6C63FF; margin: 15px auto 0; border-radius: 2px; }
+    
+    /* Pain cards */
+    .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .pain-card { background: #FFF8E1; padding: 30px; border-radius: 16px; border-left: 5px solid #FFC107; }
+    .pain-card h3 { color: #F57F17; margin-bottom: 10px; font-size: 20px; }
+    .pain-card p { color: #666; }
+    
+    /* Yellow block */
+    .yellow-block { background: #FFFDE7; padding: 50px; border-radius: 20px; margin: 40px 0; text-align: center; }
+    .yellow-block h2 { font-size: 28px; margin-bottom: 15px; }
+    .yellow-block p { font-size: 18px; color: #666; }
+    
+    /* Program */
+    .program-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+    .program-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+    .program-card .icon { font-size: 48px; margin-bottom: 15px; }
+    .program-card h3 { font-size: 20px; margin-bottom: 10px; }
+    .program-card p { color: #666; font-size: 15px; }
+    
+    /* Teacher */
+    .teacher { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; background: #f8f9fa; padding: 40px; border-radius: 20px; }
+    .teacher-photo { flex: 0 0 200px; text-align: center; }
+    .teacher-photo img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; }
+    .teacher-info { flex: 1; min-width: 300px; }
+    .teacher-info h3 { font-size: 24px; margin-bottom: 5px; }
+    .teacher-info .subtitle { color: #6C63FF; font-weight: 600; margin-bottom: 15px; }
+    .teacher-info p { color: #555; margin-bottom: 10px; }
+    
+    /* Before/After */
+    .ba-container { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
+    .ba-card { flex: 1; min-width: 280px; max-width: 500px; border-radius: 20px; overflow: hidden; }
+    .ba-before { background: #FFE4E1; }
+    .ba-after { background: #E8F5E9; }
+    .ba-header { padding: 20px; text-align: center; font-size: 22px; font-weight: 700; }
+    .ba-before .ba-header { background: #FF8A80; color: white; }
+    .ba-after .ba-header { background: #66BB6A; color: white; }
+    .ba-content { padding: 25px; }
+    .ba-content ul { list-style: none; }
+    .ba-content li { padding: 8px 0; display: flex; align-items: center; gap: 10px; font-size: 16px; }
+    
+    /* Price */
+    .price-block { background: #2d2d2d; padding: 50px; border-radius: 20px; text-align: center; color: white; }
+    .price-block h2 { font-size: 28px; margin-bottom: 20px; color: #fff; }
+    .price-block .price { font-size: 48px; font-weight: 800; margin: 20px 0; }
+    .price-block .price span { font-size: 20px; font-weight: 400; color: #aaa; }
+    .price-block .gift { display: inline-block; background: #FFC107; color: #333; padding: 10px 25px; border-radius: 30px; font-weight: 700; margin-bottom: 20px; }
+    .block-subtitle { margin-top: 20px; display: block; color: #aaa; font-size: 14px; }
+    
+    /* Reviews */
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+    .review-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eee; }
+    .review-card p { font-style: italic; margin-bottom: 15px; color: #555; }
+    .review-card .author { font-weight: 700; }
+    .review-card .highlight { display: inline-block; background: #6C63FF; color: white; padding: 3px 12px; border-radius: 12px; font-size: 12px; margin-top: 10px; }
+    .review-result { background: #f5f3ff; padding: 15px; border-radius: 12px; margin: 10px 0; font-weight: 600; color: #6C63FF; text-align: center; }
+    
+    /* FAQ */
+    .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; }
+    .faq-q { font-weight: 700; font-size: 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-a { margin-top: 10px; color: #666; display: none; }
+    .faq-item.active .faq-a { display: block; }
+    
+    /* Form */
+    .form-block { background: #f8f9fa; padding: 50px; border-radius: 20px; max-width: 600px; margin: 0 auto; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px; transition: 0.3s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #6C63FF; outline: none; }
+    
+    /* Footer */
+    .footer { background: #2d2d2d; color: white; padding: 40px 0; text-align: center; }
+    .footer a { color: #aaa; text-decoration: none; }
+    
+    /* Mobile */
+    @media (max-width: 600px) {
+      .hero-content h1 { font-size: 28px; }
+      .section-title { font-size: 24px; }
+      .header { flex-direction: column; }
+      .header-contacts { width: 100%; justify-content: center; }
+      .price-block { padding: 30px 20px; }
+      .price-block .price { font-size: 36px; }
+      .form-block { padding: 30px 20px; }
+      .yellow-block { padding: 30px 20px; }
+    }
+    @media (max-width: 400px) {
+      .hero-content h1 { font-size: 22px; }
+      .header-phone { font-size: 16px; }
+      .header-tg { font-size: 14px; padding: 8px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="container">
+  <div class="header">
+    <div class="header-logo">
+      <img src="images/logo.jpg" alt="КотиксУМ">
+      <span>КотиксУМ</span>
+    </div>
+    <div class="header-contacts">
+      <a href="tel:+79253472503" class="header-phone">+7 925 347-25-03</a>
+      <a href="https://t.me/Kotiksym" class="header-tg" target="_blank">📱 Telegram</a>
+    </div>
+  </div>
+</header>
+
+<section class="container">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">🎁 Первая диагностика — бесплатно</div>
+      <h1>Научите ребёнка читать <span>в 2–3 раза быстрее</span> и понимать всё с первого раза</h1>
+      <p>Курс скорочтения для детей 6–12 лет. м. Планерная. Индивидуальный подход к каждому ученику.</p>
+      <div class="hero-features">
+        <div class="hero-feature">🚀 +50% к скорости чтения</div>
+        <div class="hero-feature">🧠 Глубокое понимание</div>
+        <div class="hero-feature">📚 Уверенность в учёбе</div>
+      </div>
+      <a href="#form" class="btn">Записаться на диагностику</a>
+    </div>
+    <div class="hero-image">
+      <img src="images/hero-main.jpg" alt="Курс скорочтения">
+    </div>
+  </div>
+</section>
+
+<section class="container" style="background:#FFF8E1;border-radius:20px;padding:40px;">
+  <h2 class="section-title">Узнаёте свой вечер?</h2>
+  <div class="pain-grid">
+    <div class="pain-card"><h3>📖 «Мааам, я не хочу читать»</h3><p>Каждый вечер — уговоры открыть книгу. Ребёнок находит тысячу отговорок.</p></div>
+    <div class="pain-card"><h3>🐌 Читает по слогам в 3-м классе</h3><p>Одноклассники уже читают бегло, а ваш ребёнок всё ещё запинается на каждом слове.</p></div>
+    <div class="pain-card"><h3>❓ Прочитал — не понял</h3><p>Глаза пробежали текст, а в голове пусто. Пересказать не может, на вопросы не отвечает.</p></div>
+    <div class="pain-card"><h3>😰 Боится уроков чтения</h3><p>Вызывают к доске — и ребёнок теряется. Успеваемость падает, уверенность тает на глазах.</p></div>
+    <div class="pain-card"><h3>📱 Телефон вместо книги</h3><p>«Почитаю потом» — но «потом» никогда не наступает. Гаджеты побеждают книги.</p></div>
+    <div class="pain-card"><h3>⏰ Нет времени заниматься</h3><p>Работа, домашние дела, уроки — на чтение не остаётся ни сил, ни времени.</p></div>
+  </div>
+</section>
+
+<section class="container">
+  <h2 class="section-title">Программа курса</h2>
+  <div class="program-grid">
+    <div class="program-card"><div class="icon">⚡</div><h3>Техника чтения</h3><p>Упражнения для увеличения скорости без потери понимания</p></div>
+    <div class="program-card"><div class="icon">🧩</div><h3>Артикуляция</h3><p>Чёткое произношение, работа со скороговорками и дикцией</p></div>
+    <div class="program-card"><div class="icon">👁️</div><h3>Поле зрения</h3><p>Расширение периферического зрения для охвата строки</p></div>
+    <div class="program-card"><div class="icon">🧠</div><h3>Понимание текста</h3><p>Пересказ, смысловые вопросы, работа с содержанием</p></div>
+    <div class="program-card"><div class="icon">📝</div><h3>Память и внимание</h3><p>Упражнения на концентрацию и запоминание прочитанного</p></div>
+    <div class="program-card"><div class="icon">🎯</div><h3>Мотивация</h3><p>Игровые элементы, награды, прогресс — ребёнок хочет читать сам</p></div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="teacher">
+    <div class="teacher-photo">
+      <img src="images/hero-photo.jpg" alt="Преподаватель">
+    </div>
+    <div class="teacher-info">
+      <h3>Екатерина</h3>
+      <div class="subtitle">Преподаватель скорочтения</div>
+      <p>✔ Опыт работы с детьми более 5 лет</p>
+      <p>✔ Сертифицированный специалист по скорочтению</p>
+      <p>✔ Индивидуальный подход к каждому ребёнку</p>
+      <p>✔ Научила читать более 200 учеников</p>
+      <p>«Каждый ребёнок уникален. Я подбираю методику, которая подходит именно вашему ребёнку»</p>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <h2 class="section-title">До и После</h2>
+  <div class="ba-container">
+    <div class="ba-card ba-before">
+      <div class="ba-header">До курса</div>
+      <div class="ba-content">
+        <ul>
+          <li>❌ Читает 20–30 слов в минуту</li>
+          <li>❌ Запинается, переставляет буквы</li>
+          <li>❌ Не может пересказать</li>
+          <li>❌ Не любит читать</li>
+          <li>❌ Быстро устаёт</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ba-card ba-after">
+      <div class="ba-header">После курса</div>
+      <div class="ba-content">
+        <ul>
+          <li>✅ 80–120+ слов в минуту</li>
+          <li>✅ Читает плавно и уверенно</li>
+          <li>✅ Понимает и пересказывает</li>
+          <li>✅ Читает с удовольствием</li>
+          <li>✅ Выше успеваемость в школе</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="yellow-block">
+    <h2>🎯 Первая диагностика — бесплатно!</h2>
+    <p>Проверим текущую скорость чтения, понимание и дадим рекомендации. Всего 30 минут — и вы узнаете, как помочь ребёнку.</p>
+  </div>
+</section>
+
+<section class="container">
+  <h2 class="section-title">Что говорят родители</h2>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <p>«За 2 месяца сын стал читать в 2 раза быстрее! Сам берёт книги, что для нас было невероятно. Огромное спасибо!»</p>
+      <div class="author">— Анна, мама Артёма (8 лет)</div>
+      <div class="review-result">Было: 35 сл/мин → Стало: 90 сл/мин</div>
+    </div>
+    <div class="review-card">
+      <p>«Ребёнок перестал бояться чтения. Теперь сам просит купить новые книги. Учитель в школе заметила прогресс.»</p>
+      <div class="author">— Ольга, мама Даши (7 лет)</div>
+      <div class="review-result">Было: 28 сл/мин → Стало: 75 сл/мин</div>
+    </div>
+    <div class="review-card">
+      <p>«Отличный подход! Сын всегда с радостью идёт на занятия. Результат увидели уже через месяц.»</p>
+      <div class="author">— Сергей, папа Максима (9 лет)</div>
+      <div class="review-result">Было: 42 сл/мин → Стало: 105 сл/мин</div>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="price-block">
+    <h2>Стоимость обучения</h2>
+    <div class="gift">🎁 При покупке абонемента первые 2 встречи — в подарок</div>
+    <div class="price">11 000 ₽ <span>/ месяц</span></div>
+    <p>8 индивидуальных занятий<br>Диагностика — бесплатно</p>
+    <span class="block-subtitle">Разовое занятие — 2 000 ₽</span>
+  </div>
+</section>
+
+<section class="container">
+  <h2 class="section-title">Частые вопросы</h2>
+  
+  <div class="faq-item active">
+    <div class="faq-q">С какого возраста можно начинать?</div>
+    <div class="faq-a">Курс рассчитан на детей от 6 до 12 лет. Для каждого возраста — своя программа с учётом особенностей.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Сколько длится курс?</div>
+    <div class="faq-a">Базовая программа — 3 месяца. За это время ребёнок увеличивает скорость чтения в 2-3 раза. Можно продолжить для закрепления результата.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Как проходят занятия?</div>
+    <div class="faq-a">Индивидуально, 2 раза в неделю по 60 минут. Включают упражнения на скорость, понимание, артикуляцию и мотивацию.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Есть ли домашние задания?</div>
+    <div class="faq-a">Да, небольшие задания на 10-15 минут в день для закрепления результата между занятиями.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Есть ли пробное занятие?</div>
+    <div class="faq-a">Да! Первая диагностика — бесплатно. Вы увидите текущий уровень ребёнка и получите рекомендации.</div>
+  </div>
+</section>
+
+<section class="container" id="form">
+  <h2 class="section-title">Записаться на бесплатную диагностику</h2>
+  <div class="form-block">
+    <form action="https://formspree.io/f/xkgjngya" method="POST">
+      <div class="form-group">
+        <label>Ваше имя</label>
+        <input type="text" name="name" required placeholder="Как к вам обращаться?">
+      </div>
+      <div class="form-group">
+        <label>Телефон *</label>
+        <input type="tel" name="phone" required placeholder="+7 ___ ___ __ __">
+      </div>
+      <div class="form-group">
+        <label>Возраст ребёнка</label>
+        <input type="text" name="age" placeholder="Например: 8 лет">
+      </div>
+      <div class="form-group">
+        <label>Когда вам удобно позвонить?</label>
+        <input type="text" name="call_time" placeholder="Например: с 14 до 16">
+      </div>
+      <div class="form-group">
+        <label>Telegram (если удобнее)</label>
+        <input type="text" name="telegram" placeholder="@username">
+      </div>
+      <button type="submit" class="btn" style="width:100%;">Записаться</button>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>© 2026 КотиксУМ. Курс скорочтения для детей. м. Планерная, Москва.</p>
+    <p><a href="tel:+79253472503">+7 925 347-25-03</a> | <a href="https://t.me/Kotiksym">Telegram</a></p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    q.parentElement.classList.toggle('active');
+  });
+});
+</script>
+
+</body>
+</html>
