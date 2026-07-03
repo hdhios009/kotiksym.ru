@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://kotiksym.ru/sitemap.xml
