@@ -608,11 +608,19 @@ class Component extends DCLogic {
           };
           ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","yclid"].forEach(function(k){ if(_p.get(k)) _payload[k]=_p.get(k); });
           try {
-            await fetch("https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec", {
-              method: "POST",
-              mode: "no-cors",
-              body: new URLSearchParams(_payload)
-            });
+            var _form = document.createElement('form');
+            _form.method = 'POST';
+            _form.action = 'https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec';
+            _form.target = 'gas_hidden_iframe';
+            _form.style.display = 'none';
+            var _fields = {name: _payload['Имя'], phone: _payload['Телефон'], age: _payload['Возраст ребёнка'], page_url: _payload.page_url, page_path: _payload['Страница заявки'], page_title: _payload.page_title};
+            ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','yclid'].forEach(function(k){ if(_payload[k]) _fields[k]=_payload[k]; });
+            for(var k in _fields){ var inp=document.createElement('input'); inp.type='hidden'; inp.name=k; inp.value=_fields[k]; _form.appendChild(inp); }
+            var ifr = document.getElementById('gas_hidden_iframe');
+            if(!ifr){ ifr=document.createElement('iframe'); ifr.id='gas_hidden_iframe'; ifr.name='gas_hidden_iframe'; ifr.style.display='none'; document.body.appendChild(ifr); }
+            document.body.appendChild(_form);
+            _form.submit();
+            setTimeout(function(){ try{document.body.removeChild(_form)}catch(e){} }, 100);
             if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
             this.setState({ sent: true, sending: false, name: "", phone: "", age: "" });
             setBtn("Записаться и получить подарок", false);
