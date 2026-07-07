@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://kotiksym.ru/</loc>
-    <lastmod>2026-07-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://kotiksym.ru/privacy.html</loc>
-    <lastmod>2026-07-03</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
+  <url><loc>https://kotiksym.ru/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://kotiksym.ru/chitaet-medlenno/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kotiksym.ru/ne-ponimaet-tekst/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kotiksym.ru/ne-mozhet-pereskazat/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kotiksym.ru/domashka-do-vechera/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kotiksym.ru/zabyvaet-prochitannoe/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kotiksym.ru/boitsya-otvechat/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kotiksym.ru/oshibki-po-nevnimatelnosti/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kotiksym.ru/skorochtenie-deti/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kotiksym.ru/privacy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>
