@@ -574,7 +574,7 @@ class Component extends DCLogic {
             "Источник (referrer)": document.referrer || "прямой заход",
             "page_url": location.href,
             "page_title": document.title,
-            "_subject": "Новая заявка с сайта КотиксУМ — " + location.pathname
+            "_subject": "[" + document.title + "] Заявка с kotiksym.ru"
           };
           ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","yclid"].forEach(function(k){ if(_p.get(k)) _payload[k]=_p.get(k); });
           const res = await fetch("https://formspree.io/f/xgojzbja", {
