@@ -582,59 +582,45 @@ class Component extends DCLogic {
       onSubmit: async (e) => {
         if (this.state.sending) return;
         const btn = e && e.currentTarget;
-        const setBtn = (text, disabled) => { if (btn) { btn.textContent = text; btn.disabled = !!disabled; btn.style.opacity = disabled ? "0.7" : "1"; } };
-        if (!this.state.name.trim()) {
-          alert("Напишите, как вас зовут.");
-          return;
-        }
-        if (!this.isValidRuPhone(this.state.phone)) {
-          alert("Введите российский номер: +7 и 10 цифр, например +7 (968) 455-18-00.");
-          return;
-        }
+        const setBtn = (text, disabled) => { if (btn) { btn.textContent = text; btn.disabled = !!disabled; btn.style.opacity = disabled ? '0.7' : '1'; } };
+        const rawName = (this.state.name || '').trim();
+        const rawPhone = (this.state.phone || '').trim();
+        if (!rawName) { alert('Напишите, как вас зовут.'); return; }
+        if (!this.isValidRuPhone(rawPhone)) { alert('Введите российский номер: +7 и 10 цифр.'); return; }
         this.setState({ sending: true });
-        setBtn("Отправляем…", true);
+        setBtn('Отправляем…', true);
         try {
-          var _p = new URLSearchParams(location.search);
-          var _payload = {
-            "Имя": this.state.name,
-            "Телефон": this.state.phone,
-            "Возраст ребёнка": this.state.age,
-            "Страница заявки": location.pathname,
-            "Заголовок страницы": document.title,
-            "Источник (referrer)": document.referrer || "прямой заход",
-            "page_url": location.href,
-            "page_title": document.title,
-            "_subject": "Новая заявка с сайта КотиксУМ — " + location.pathname
+          const _pageLabels = {'/':'Главная страница','/chitaet-medlenno/':'Читает медленно','/ne-ponimaet-tekst/':'Не понимает текст','/ne-mozhet-pereskazat/':'Не может пересказать','/domashka-do-vechera/':'Домашка до вечера','/zabyvaet-prochitannoe/':'Забывает прочитанное','/boitsya-otvechat/':'Боится отвечать','/oshibki-po-nevnimatelnosti/':'Ошибки по невнимательности','/skorochtenie-deti/':'Скорочтение для детей'};
+          const _f = {
+            name: "'" + rawName,
+            phone: "'" + rawPhone,
+            age: this.state.age || '',
+            page_url: location.href,
+            page_path: location.pathname,
+            page_title: document.title,
+            page_label: _pageLabels[location.pathname] || document.title || location.pathname
           };
-          ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","yclid"].forEach(function(k){ if(_p.get(k)) _payload[k]=_p.get(k); });
-          try {
-            var _form = document.createElement('form');
-            _form.method = 'POST';
-            _form.action = 'https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec';
-            _form.target = 'gas_hidden_iframe';
-            _form.style.display = 'none';
-            const _pageLabels = {'/':'Главная страница','/chitaet-medlenno/':'Читает медленно','/ne-ponimaet-tekst/':'Не понимает текст','/ne-mozhet-pereskazat/':'Не может пересказать','/domashka-do-vechera/':'Домашка до вечера','/zabyvaet-prochitannoe/':'Забывает прочитанное','/boitsya-otvechat/':'Боится отвечать','/oshibki-po-nevnimatelnosti/':'Ошибки по невнимательности','/skorochtenie-deti/':'Скорочтение для детей'};
-            const _pageLabel = _pageLabels[window.location.pathname] || document.title || window.location.pathname;
-            var _fields = {name: "'" + _payload['Имя'], phone: "'" + _payload['Телефон'], age: _payload['Возраст ребёнка'], page_url: _payload.page_url, page_path: _payload['Страница заявки'], page_title: _payload.page_title, page_label: _pageLabel};
-            ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','yclid'].forEach(function(k){ if(_payload[k]) _fields[k]=_payload[k]; });
-            for(var k in _fields){ var inp=document.createElement('input'); inp.type='hidden'; inp.name=k; inp.value=_fields[k]; _form.appendChild(inp); }
-            var ifr = document.getElementById('gas_hidden_iframe');
-            if(!ifr){ ifr=document.createElement('iframe'); ifr.id='gas_hidden_iframe'; ifr.name='gas_hidden_iframe'; ifr.style.display='none'; document.body.appendChild(ifr); }
-            document.body.appendChild(_form);
-            _form.submit();
-            setTimeout(function(){ try{document.body.removeChild(_form)}catch(e){} }, 100);
-            if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
-            this.setState({ sent: true, sending: false, name: "", phone: "", age: "" });
-            setBtn("Записаться и получить подарок", false);
-          } catch(err) {
-            this.setState({ sending: false });
-            setBtn("Записаться и получить подарок", false);
-            alert("Не получилось отправить заявку. Напишите нам в Telegram или позвоните.");
-          }
-        } catch (err) {
+          const _p = new URLSearchParams(location.search);
+          ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','yclid'].forEach(function(k){ var v=_p.get(k); if(v) _f[k]=v; });
+          console.log('Kotiksym form submit:', JSON.stringify(_f));
+          var _form = document.createElement('form');
+          _form.method = 'POST';
+          _form.action = 'https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec';
+          _form.target = 'gas_hidden_iframe';
+          _form.style.display = 'none';
+          for (var k in _f) { var inp = document.createElement('input'); inp.type = 'hidden'; inp.name = k; inp.value = _f[k]; _form.appendChild(inp); }
+          var ifr = document.getElementById('gas_hidden_iframe');
+          if (!ifr) { ifr = document.createElement('iframe'); ifr.id = 'gas_hidden_iframe'; ifr.name = 'gas_hidden_iframe'; ifr.style.display = 'none'; document.body.appendChild(ifr); }
+          document.body.appendChild(_form);
+          _form.submit();
+          setTimeout(function(){ try{document.body.removeChild(_form)}catch(e){} }, 100);
+          if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
+          this.setState({ sent: true, sending: false, name: '', phone: '', age: '' });
+          setBtn('Записаться и получить подарок', false);
+        } catch(err) {
           this.setState({ sending: false });
-          setBtn("Записаться и получить подарок", false);
-          alert("Нет связи с сервером. Проверьте интернет и попробуйте ещё раз.");
+          setBtn('Записаться и получить подарок', false);
+          alert('Не получилось отправить заявку. Напишите нам в Telegram или позвоните.');
         }
       },
     };
