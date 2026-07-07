@@ -24,10 +24,10 @@
    m[i].l=1*new Date();
    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110358783', 'ym');
-   ym(110358783, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+   (window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110489022', 'ym');
+   ym(110489022, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/110358783" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript><div><img src="https://mc.yandex.ru/watch/110489022" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 </head>
 <body>
@@ -583,7 +583,7 @@ class Component extends DCLogic {
             body: JSON.stringify(_payload)
           });
           if (res.ok) {
-            if (window.ym) ym(110358783, 'reachGoal', 'lead_form_submit');
+            if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
             this.setState({ sent: true, sending: false, name: "", phone: "", age: "" });
             setBtn("Записаться и получить подарок", false);
           } else {
