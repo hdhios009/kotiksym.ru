@@ -526,11 +526,13 @@ img,svg,iframe,video{max-width:100%}
     </div>
   </footer>
 
-  <!-- SUCCESS MODAL -->
-  <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ onCloseModal }}" style="position:fixed;inset:0;z-index:100;background:rgba(27,25,54,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:grid;place-items:center;padding:20px;animation:fadeIn .2s ease">
-    <div onClick="{{ stop }}" style="position:relative;width:min(440px,100%);background:#FFFDF9;border:1px solid #E4D8C2;border-radius:24px;padding:38px 34px 34px;text-align:center;box-shadow:0 40px 90px rgba(27,25,54,.4);animation:popIn .32s cubic-bezier(.2,.9,.3,1.2)">
-      <button type="button" onClick="{{ onCloseModal }}" aria-label="Закрыть" style="position:absolute;top:14px;right:14px;width:34px;height:34px;border:0;border-radius:9px;background:#F1E7D4;color:#6f6a64;cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center" style-hover="background:#E7DAC2">✕</button>
+
+
+</div>
+</x-dc>
+  <div id="successModal" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(27,25,54,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);place-items:center;padding:20px">
+    <div onclick="event.stopPropagation()" style="position:relative;width:min(440px,100%);background:#FFFDF9;border:1px solid #E4D8C2;border-radius:24px;padding:38px 34px 34px;text-align:center;box-shadow:0 40px 90px rgba(27,25,54,.4);animation:popIn .32s cubic-bezier(.2,.9,.3,1.2)">
+      <button type="button" onclick="document.getElementById('successModal').style.display='none'" aria-label="Закрыть" style="position:absolute;top:14px;right:14px;width:34px;height:34px;border:0;border-radius:9px;background:#F1E7D4;color:#6f6a64;cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center" style-hover="background:#E7DAC2">✕</button>
       <div style="display:flex;justify-content:center;margin-bottom:20px">
         <span style="position:relative;width:82px;height:82px">
           <img src="../images/logo.jpg" alt="КотиксУМ" style="width:82px;height:82px;border-radius:20px;object-fit:contain;background:#fff;border:1px solid #E4D8C2;padding:8px;box-shadow:0 12px 26px rgba(28,27,41,.14)"/>
@@ -543,13 +545,10 @@ img,svg,iframe,video{max-width:100%}
       <a href="https://max.ru/id410117202302_bot" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border-radius:12px;font-weight:700;font-size:16px;color:#fff;background:linear-gradient(135deg,#2E7BF6,#8B3BE0);text-decoration:none;box-shadow:0 12px 26px rgba(90,60,220,.3);transition:transform .18s" style-hover="transform:translateY(-2px)"><img src="../images/max-icon.jpg" alt="" style="width:22px;height:22px;border-radius:6px;object-fit:cover"/>Забрать в&#160;МАКС →</a>
       <a href="https://t.me/kotiksymgiftbot" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border-radius:12px;font-weight:700;font-size:16px;color:#fff;background:#29A9EB;text-decoration:none;box-shadow:0 12px 26px rgba(41,169,235,.3);transition:transform .18s" style-hover="transform:translateY(-2px)"><img src="../images/tg-icon.png" alt="" style="width:22px;height:22px;object-fit:contain"/>Забрать в&#160;Telegram →</a>
       </div>
-      <button type="button" onClick="{{ onCloseModal }}" style="margin-top:12px;background:none;border:0;color:#9b9590;font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:2px">Позже</button>
+      <button type="button" onclick="document.getElementById('successModal').style.display='none'" style="margin-top:12px;background:none;border:0;color:#9b9590;font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:2px">Позже</button>
     </div>
   </div>
-  </sc-if>
 
-</div>
-</x-dc>
 <script type="text/x-dc" data-dc-script data-props="{
   &quot;$preview&quot;: { &quot;width&quot;: 1200, &quot;height&quot;: 940 },
   &quot;accentTheme&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;Синий&quot;, &quot;Красный&quot;, &quot;Зелёный&quot;], &quot;default&quot;: &quot;Синий&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Стиль&quot; },
@@ -642,6 +641,7 @@ class Component extends DCLogic {
           });
           if (res.ok) {
             if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
+            try { var _m = document.getElementById('successModal'); if (_m) _m.style.display = 'grid'; } catch(e){}
             this.setState({ sent: true, sending: false, name: "", phone: "", age: "" });
             setBtn("Записаться и получить подарок", false);
           } else {
