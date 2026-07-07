@@ -30,32 +30,60 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/110489022" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <style id="mobile-fix">
-/* ===== MOBILE FIX (append-only) ===== */
+/* ===== MOBILE FIX v3 — мобильная композиция ===== */
+*{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
-img,svg,iframe{max-width:100%}
+img,svg,iframe,video{max-width:100%}
+*{min-width:0}
 @media (max-width:768px){
   img{height:auto !important}
   .wrap{width:calc(100% - 32px) !important;margin:0 auto !important}
+  /* сетки — в одну колонку */
   [data-hero-grid],[data-dirs],[data-choose],[data-live],[data-reviews],[data-offer],[data-gallery],[data-contacts],[data-pain],[data-why],[data-diag],[data-ba],[data-proof]{grid-template-columns:1fr !important}
-  [data-hero]{padding-top:26px !important;padding-bottom:32px !important}
-  [data-hero-grid]{gap:26px !important}
-  [data-h1]{font-size:clamp(28px,8.2vw,40px) !important;line-height:1.08 !important}
+  /* первый экран */
+  [data-hero]{padding-top:22px !important;padding-bottom:28px !important}
+  [data-hero]>[aria-hidden="true"]{display:none !important}     /* декор, вылезающий за экран */
+  [data-hero-grid]{gap:22px !important}
+  [data-h1]{font-size:clamp(27px,7.4vw,40px) !important;line-height:1.1 !important}
   [data-photo]{max-width:100% !important;margin:0 auto !important}
+  [data-diagline]{white-space:normal !important;font-size:clamp(19px,5.4vw,26px) !important;line-height:1.15 !important}
+  /* компактная статистика 600+/7–14/до 6 */
+  [data-proof]>div{display:flex !important;align-items:baseline !important;gap:10px !important;border-right:0 !important;border-bottom:1px solid #E4D8C2 !important}
+  [data-proof]>div:last-child{border-bottom:0 !important}
+  [data-proof] span{margin-top:0 !important}
+  /* шапка */
   [data-nav-links],[data-nav-metro],[data-navsub]{display:none !important}
+  /* кнопки на всю ширину, одна под другой */
   [data-hero-cta]{flex-direction:column !important;gap:10px !important}
   [data-hero-cta]>a,[data-cta]>a,[data-submit]{width:100% !important;justify-content:center !important;text-align:center !important}
+  /* форма */
   [data-formgrid]{grid-template-columns:1fr !important}
   [data-formgrid] input,[data-submit]{font-size:16px !important}
   [data-submit]{padding:17px !important}
-  [data-price]{font-size:clamp(40px,12vw,56px) !important}
-  [data-h1],h1,h2,h3{overflow-wrap:anywhere;text-wrap:balance}
+  #form{padding:24px !important}
+  [data-offer]>div{padding:24px !important}
+  [data-price]{font-size:clamp(40px,12vw,54px) !important}
+  /* компактнее секции и заголовки блоков */
+  [data-sec]{padding-top:40px !important;padding-bottom:40px !important}
+  [data-head]{margin-bottom:22px !important}
+  /* короче страница: прячем второстепенное */
+  .wrap:has([data-gallery]){display:none !important}   /* большая галерея */
+  .wrap:has([data-live]){display:none !important}       /* «живой центр» — дублирует «почему доверяют» */
+  section:last-of-type{display:none !important}          /* блок внутренних «частых запросов» */
+  /* отзывы: оставляем 2, остальные прячем */
+  [data-reviews]>*:nth-child(n+3){display:none !important}
+  /* ничего не обрезается */
+  h1,h2,h3,p,li,a,span,div{overflow-wrap:break-word}
+  h1,h2,h3{text-wrap:balance}
 }
 @media (max-width:380px){
-  .wrap{width:calc(100% - 24px) !important}
-  [data-sec]{padding-top:40px !important;padding-bottom:40px !important}
+  .wrap{width:calc(100% - 22px) !important}
+  [data-h1]{font-size:clamp(25px,8vw,34px) !important}
+  [data-diagline]{font-size:19px !important}
+  #form{padding:20px !important}
+  [data-sec]{padding-top:34px !important;padding-bottom:34px !important}
 }
 /* ===== /MOBILE FIX ===== */
-</style>
 </head>
 <body>
 <noscript>
