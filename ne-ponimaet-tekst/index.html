@@ -613,7 +613,9 @@ class Component extends DCLogic {
             _form.action = 'https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec';
             _form.target = 'gas_hidden_iframe';
             _form.style.display = 'none';
-            var _fields = {name: _payload['Имя'], phone: _payload['Телефон'], age: _payload['Возраст ребёнка'], page_url: _payload.page_url, page_path: _payload['Страница заявки'], page_title: _payload.page_title};
+            const _pageLabels = {'/':'Главная страница','/chitaet-medlenno/':'Читает медленно','/ne-ponimaet-tekst/':'Не понимает текст','/ne-mozhet-pereskazat/':'Не может пересказать','/domashka-do-vechera/':'Домашка до вечера','/zabyvaet-prochitannoe/':'Забывает прочитанное','/boitsya-otvechat/':'Боится отвечать','/oshibki-po-nevnimatelnosti/':'Ошибки по невнимательности','/skorochtenie-deti/':'Скорочтение для детей'};
+            const _pageLabel = _pageLabels[window.location.pathname] || document.title || window.location.pathname;
+            var _fields = {name: "'" + _payload['Имя'], phone: "'" + _payload['Телефон'], age: _payload['Возраст ребёнка'], page_url: _payload.page_url, page_path: _payload['Страница заявки'], page_title: _payload.page_title, page_label: _pageLabel};
             ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','yclid'].forEach(function(k){ if(_payload[k]) _fields[k]=_payload[k]; });
             for(var k in _fields){ var inp=document.createElement('input'); inp.type='hidden'; inp.name=k; inp.value=_fields[k]; _form.appendChild(inp); }
             var ifr = document.getElementById('gas_hidden_iframe');
