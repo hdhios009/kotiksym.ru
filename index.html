@@ -628,13 +628,11 @@ class Component extends DCLogic {
             "_subject": "Новая заявка с сайта КотиксУМ — " + location.pathname
           };
           ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","yclid"].forEach(function(k){ if(_p.get(k)) _payload[k]=_p.get(k); });
-          const _formBody = new URLSearchParams();
-          for (var k in _payload) { _formBody.append(k, _payload[k]); }
           try {
             await fetch("https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec", {
               method: "POST",
               mode: "no-cors",
-              body: _formBody
+              body: new URLSearchParams(_payload)
             });
             if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
             this.setState({ sent: true, sending: false, name: "", phone: "", age: "" });
