@@ -172,6 +172,27 @@ img,svg,iframe{max-width:100%}
     [data-navsub]{display:none!important}
     [data-reviews] article{padding:22px!important}
   }
+
+  /* ===== DESKTOP: hero photo fix ===== */
+  @media (min-width: 1024px){
+    [data-hero-grid]{
+      grid-template-columns:1fr 400px !important;
+      gap:48px !important;
+    }
+    [data-photo]{
+      width:100% !important;
+      max-width:400px !important;
+      justify-self:end !important;
+      position:relative !important;
+      right:auto !important;
+      top:auto !important;
+      transform:none !important;
+    }
+    [data-photo] img{
+      max-height:none !important;
+      object-fit:cover !important;
+    }
+  }
 </style>
 </helmet>
 
