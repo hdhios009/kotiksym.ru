@@ -17,7 +17,12 @@
     '/zabyvaet-prochitannoe/': 'Забывает текст',
     '/boitsya-otvechat/': 'Боится отвечать',
     '/oshibki-po-nevnimatelnosti/': 'Ошибки по вниманию',
-    '/skorochtenie-deti/': 'Скорочтение детям'
+    '/skorochtenie-deti/': 'Скорочтение детям',
+    '/angliyskiy-yazyk/': 'Английский для детей',
+    '/podgotovka-k-shkole/': 'Подготовка к школе',
+    '/pamyat-i-vnimanie/': 'Память и внимание',
+    '/logika-i-myshlenie/': 'Логика и мышление',
+    '/kalligrafiya-gramotnost/': 'Каллиграфия и грамотность'
   };
 
   var isSubmitting = false;
