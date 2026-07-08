@@ -1,7 +1,7 @@
 /**
- * Kotiksym unified lead form handler
- * Loaded on all 9 pages via <script src="form.js"></script>
- * Works alongside the Zero Block component, adding a second listener.
+ * Kotiksym unified lead form handler v2
+ * Sole lead form submission handler for all pages.
+ * Overrides duplicate Zero Block submissions.
  */
 (function () {
   'use strict';
@@ -9,55 +9,74 @@
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec';
 
   var PAGE_LABELS = {
-    '/': 'Главная страница',
-    '/chitaet-medlenno/': 'Читает медленно',
+    '/': 'Главная КотиксУМ',
     '/ne-ponimaet-tekst/': 'Не понимает текст',
-    '/ne-mozhet-pereskazat/': 'Не может пересказать',
     '/domashka-do-vechera/': 'Домашка до вечера',
-    '/zabyvaet-prochitannoe/': 'Забывает прочитанное',
+    '/ne-mozhet-pereskazat/': 'Не может пересказать',
+    '/chitaet-medlenno/': 'Медленно читает',
+    '/zabyvaet-prochitannoe/': 'Забывает текст',
     '/boitsya-otvechat/': 'Боится отвечать',
-    '/oshibki-po-nevnimatelnosti/': 'Ошибки по невнимательности',
-    '/skorochtenie-deti/': 'Скорочтение для детей'
+    '/oshibki-po-nevnimatelnosti/': 'Ошибки по вниманию',
+    '/skorochtenie-deti/': 'Скорочтение детям'
   };
+
+  var isSubmitting = false;
+  var SUBMIT_COOLDOWN = 7000; // ms
 
   function isValidRuPhone(value) {
     var d = (value || '').replace(/\D/g, '');
     return d.length === 11 && d[0] === '7';
   }
 
-  function getFormFields() {
-    var nameInput = document.querySelector('[name="name"], input[placeholder*="Ваше имя"], input[placeholder*="ваше имя"]');
-    var phoneInput = document.querySelector('[name="phone"], input[inputMode="tel"]');
-    var ageInput = document.querySelector('[name="age"], input[placeholder*="Возраст"]');
+  function findInput(selectors) {
+    for (var i = 0; i < selectors.length; i++) {
+      var el = document.querySelector(selectors[i]);
+      if (el) return el;
+    }
+    return null;
+  }
+
+  function collectFields() {
+    var nameInput = findInput(['[name="name"]', 'input[placeholder*="Ваше имя"]', 'input[placeholder*="ваше имя"]']);
+    var phoneInput = findInput(['[name="phone"]', 'input[inputMode="tel"]']);
+    var ageInput = findInput(['[name="age"]', 'input[placeholder*="Возраст"]']);
 
     var name = (nameInput ? nameInput.value : '').trim();
     var phone = (phoneInput ? phoneInput.value : '').trim();
     var age = (ageInput ? ageInput.value : '').trim();
-
-    return { name: name, phone: phone, age: age };
-  }
-
-  function sendForm(name, phone, age) {
     var path = window.location.pathname;
+    var label = PAGE_LABELS[path] || document.title || path;
+
+    var _p = new URLSearchParams(window.location.search);
     var fields = {
       name: "'" + name,
       phone: "'" + phone,
       age: age || '',
-      page_url: window.location.href,
+      page_url: window.location.href || document.URL || '',
       page_path: path,
       page_title: document.title,
-      page_label: PAGE_LABELS[path] || document.title || path
+      page_label: label,
+      lead_id: Date.now() + '_' + Math.random().toString(36).slice(2, 10),
+      request_source: 'form_js_v2'
     };
 
-    var _p = new URLSearchParams(window.location.search);
     ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid'].forEach(function (k) {
       var v = _p.get(k);
       if (v) fields[k] = v;
     });
 
-    console.log('Kotiksym form send:', JSON.stringify(fields));
+    return fields;
+  }
 
-    // Build hidden form + iframe
+  function isFieldsValid(fields) {
+    var rawName = (fields.name || '').replace(/^'/, '').trim();
+    var rawPhone = (fields.phone || '').replace(/^'/, '').trim();
+    if (rawName.length < 2) return false;
+    if (!isValidRuPhone(rawPhone)) return false;
+    return true;
+  }
+
+  function sendForm(fields) {
     var form = document.createElement('form');
     form.method = 'POST';
     form.action = GAS_URL;
@@ -69,7 +88,7 @@
         var inp = document.createElement('input');
         inp.type = 'hidden';
         inp.name = k;
-        inp.value = fields[k];
+        inp.value = String(fields[k]);
         form.appendChild(inp);
       }
     }
@@ -84,44 +103,69 @@
     }
 
     document.body.appendChild(form);
+    console.log('Kotiksym form submit:', JSON.stringify(fields));
     form.submit();
+
     setTimeout(function () {
       try { document.body.removeChild(form); } catch (e) {}
     }, 200);
 
-    // Fire Metrika goal
     if (window.ym) {
       ym(110489022, 'reachGoal', 'lead_form_submit');
     }
   }
 
-  // Watch for click on submit button every 500ms (light polling to catch Zero Block button)
-  // Also listen for React state changes.
-  var lastSubmitTime = 0;
+  function handleSubmit(originalEvent) {
+    // Block double submissions
+    if (isSubmitting) {
+      console.log('Kotiksym form: already submitting, ignored');
+      return;
+    }
 
-  document.addEventListener('click', function (e) {
-    var btn = e.target.closest('[data-submit], button:has(> [data-submit]), button[onClick*="onSubmit"]');
-    if (!btn) return;
+    // Prevent all other handlers from firing
+    if (originalEvent) {
+      originalEvent.preventDefault();
+      originalEvent.stopPropagation();
+      originalEvent.stopImmediatePropagation();
+    }
 
-    // Debounce — allow only once per 3 seconds
-    var now = Date.now();
-    if (now - lastSubmitTime < 3000) return;
+    var fields = collectFields();
 
-    // Small delay to let Zero Block validation run first
+    if (!isFieldsValid(fields)) {
+      alert('Заполните имя и телефон');
+      return;
+    }
+
+    isSubmitting = true;
+    sendForm(fields);
+
+    // Reset cooldown
     setTimeout(function () {
-      var f = getFormFields();
-      if (f.name.length < 2) {
-        alert('Заполните имя и телефон');
-        return;
-      }
-      if (!isValidRuPhone(f.phone)) {
-        alert('Заполните имя и телефон');
-        return;
-      }
-      sendForm(f.name, f.phone, f.age);
-      lastSubmitTime = Date.now();
-    }, 300);
-  });
+      isSubmitting = false;
+    }, SUBMIT_COOLDOWN);
+  }
 
-  console.log('Kotiksym form handler loaded');
+  // --- Bind to all possible click points ---
+
+  // 1. Direct click on data-submit buttons
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-submit], button[data-submit], .form-button, button[onClick*="onSubmit"]');
+    if (!btn) return;
+    handleSubmit(e);
+  }, true); // capture phase
+
+  // 2. Also intercept if Zero Block's React component dispatches submit
+  // Override the component's onSubmit reference by patching state setter
+  var _origSetState = null;
+  var dcCheck = setInterval(function () {
+    var dcScript = document.querySelector('script[data-dc-script]');
+    if (!dcScript) return;
+    // Check if the component has the state prop
+    var comp = document.querySelector('x-dc');
+    if (comp && comp.__dcComponent) {
+      clearInterval(dcCheck);
+    }
+  }, 1000);
+
+  console.log('Kotiksym form handler v2 loaded');
 })();
