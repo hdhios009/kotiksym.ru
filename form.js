@@ -6,7 +6,7 @@
 (function () {
   'use strict';
 
-  var GAS_URL = 'https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec';
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbx4NvxPBhVSNW0tXSuH50QYLfgdjqszZqffId_ee56L0QVbcbmHtXAEpMjamt5gADdL/exec';
 
   var PAGE_LABELS = {
     '/': 'Главная КотиксУМ',
