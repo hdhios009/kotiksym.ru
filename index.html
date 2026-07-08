@@ -606,7 +606,7 @@ class Component extends DCLogic {
         const setBtn = (text, disabled) => { if (btn) { btn.textContent = text; btn.disabled = !!disabled; btn.style.opacity = disabled ? '0.7' : '1'; } };
         const rawName = (this.state.name || '').trim();
         const rawPhone = (this.state.phone || '').trim();
-        if (!rawName) { alert('Напишите, как вас зовут.'); return; }
+        if (rawName.length < 2) { alert('Напишите имя (не менее 2 символов).'); return; }
         if (!this.isValidRuPhone(rawPhone)) { alert('Введите российский номер: +7 и 10 цифр.'); return; }
         this.setState({ sending: true });
         setBtn('Отправляем…', true);
