@@ -28,17 +28,32 @@
     var p = pick(['[name="phone"]','input[inputMode="tel"]']);
     var a = pick(['[name="age"]','input[placeholder*="Возраст"]']);
     var path = window.location.pathname;
+    var href = location.href;
+    var title = document.title;
+    var label = LABELS[path]||title||path;
     var q = new URLSearchParams(location.search);
+    var name = (n?n.value:'').trim();
+    var phone = (p?p.value:'').trim();
+    var age = (a?a.value:'').trim()||'';
     var f = {
-      'Имя': (n?n.value:'').trim(),
-      'Телефон': (p?p.value:'').trim(),
-      'Возраст ребёнка': (a?a.value:'').trim()||'',
-      'Страница заявки': path,
-      'Заголовок страницы': document.title,
+      // English fields
+      name: name,
+      phone: phone,
+      age: age,
+      page_url: href,
+      page_path: path,
+      page_title: title,
+      page_label: label,
+      // Russian fields
+      'Имя': name,
+      'Телефон': phone,
+      'Возраст ребёнка': age,
+      'Страница заявки': href,
+      'Путь страницы': path,
+      'Заголовок страницы': title,
+      'Источник заявки': label,
       'Источник (referrer)': document.referrer||'прямой заход',
-      page_url: location.href,
-      page_title: document.title,
-      page_label: LABELS[path]||document.title||path,
+      // Metadata
       lead_id: Date.now()+'_'+Math.random().toString(36).slice(2,10),
       request_source: 'form_js_v3'
     };
