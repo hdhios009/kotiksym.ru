@@ -523,37 +523,10 @@ img,svg,iframe{max-width:100%}
 
 <script>
 (function(){
-  var PAGE_LABEL="Логика и мышление";
-  var ENDPOINT="https://script.google.com/macros/s/AKfycbx4NvxPBhVSNW0tXSuH50QYLfgdjqszZqffId_ee56L0QVbcbmHtXAEpMjamt5gADdL/exec";
   function wire(attr,onE,offE){document.querySelectorAll('['+attr+']').forEach(function(el){var extra=el.getAttribute(attr);if(!extra)return;var base=el.getAttribute('style')||'';el.addEventListener(onE,function(){el.setAttribute('style',base+';'+extra);});el.addEventListener(offE,function(){el.setAttribute('style',base);});});}
   wire('style-hover','mouseenter','mouseleave');
   wire('style-focus','focus','blur');
   document.querySelectorAll('[style-active]').forEach(function(el){var extra=el.getAttribute('style-active');if(!extra)return;var base=el.getAttribute('style')||'';el.addEventListener('mousedown',function(){el.setAttribute('style',base+';'+extra);});el.addEventListener('mouseup',function(){el.setAttribute('style',base);});el.addEventListener('mouseleave',function(){el.setAttribute('style',base);});});
-  var nameEl=document.getElementById('f_name'),phoneEl=document.getElementById('f_phone'),ageEl=document.getElementById('f_age'),btn=document.getElementById('f_submit');
-  var prevPhone='';
-  function fmt(raw,prev){var d=(raw||'').replace(/\D/g,'');if(d.indexOf('8')===0)d='7'+d.slice(1);else if(d.indexOf('9')===0)d='7'+d;else if(d&&d[0]!=='7')d='7'+d;d=d.slice(0,11);if(prev!=null&&(raw||'').length<prev.length){var pd=prev.replace(/\D/g,'');if(pd===d)d=d.slice(0,-1);}var r=d.slice(1);if(r.length===0)return '';var out='+7 ('+r.slice(0,3);if(r.length>=3)out+=')';if(r.length>3)out+=' '+r.slice(3,6);if(r.length>6)out+='-'+r.slice(6,8);if(r.length>8)out+='-'+r.slice(8,10);return out;}
-  if(phoneEl)phoneEl.addEventListener('input',function(){var v=fmt(phoneEl.value,prevPhone);phoneEl.value=v;prevPhone=v;});
-  if(ageEl)ageEl.addEventListener('input',function(){ageEl.value=ageEl.value.replace(/[^0-9]/g,'').slice(0,2);});
-  function validPhone(v){var d=(v||'').replace(/\D/g,'');return d.length===11&&d[0]==='7';}
-  if(btn)btn.addEventListener('click',function(){
-    if(btn.disabled)return;
-    var name=((nameEl&&nameEl.value)||'').trim();var phone=(phoneEl&&phoneEl.value)||'';var age=(ageEl&&ageEl.value)||'';
-    if(!name){alert('Напишите, как вас зовут.');return;}
-    if(!validPhone(phone)){alert('Введите российский номер: +7 и 10 цифр, например +7 (968) 455-18-00.');return;}
-    var orig=btn.textContent;btn.textContent='Отправляем…';btn.disabled=true;btn.style.opacity='0.7';
-    var p=new URLSearchParams();
-    p.append('Имя',name);p.append('Телефон',phone);p.append('Возраст ребёнка',age);p.append('Источник заявки',PAGE_LABEL);p.append('Страница заявки',location.href);
-    p.append('name',name);p.append('phone',phone);p.append('age',age);p.append('page_label',PAGE_LABEL);p.append('page_url',location.href);
-    fetch(ENDPOINT,{method:'POST',mode:'no-cors',body:p}).then(function(){
-      if(window.ym)ym(110489022,'reachGoal','lead_form_submit');
-      var m=document.getElementById('successModal');if(m)m.style.display='grid';
-      if(nameEl)nameEl.value='';if(phoneEl)phoneEl.value='';if(ageEl)ageEl.value='';prevPhone='';
-      btn.textContent=orig;btn.disabled=false;btn.style.opacity='1';
-    }).catch(function(){
-      btn.textContent=orig;btn.disabled=false;btn.style.opacity='1';
-      alert('Не удалось отправить. Позвоните нам или напишите в Telegram.');
-    });
-  });
 })();
 </script>
 <script src="./form.js"></script>
