@@ -43,6 +43,9 @@ img,svg,iframe{max-width:100%}
   [data-nav-links],[data-nav-metro],[data-navsub]{display:none !important}
   [data-hero-cta]{flex-direction:column !important;gap:10px !important}
   [data-hero-cta]>a,[data-cta]>a,[data-submit]{width:100% !important;justify-content:center !important;text-align:center !important}
+  .form-field{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .field-error{color:#e53935;font-size:12px;line-height:1.3}
+  .field-error[hidden]{display:none!important}
   [data-formgrid]{grid-template-columns:1fr !important}
   [data-formgrid] input,[data-submit]{font-size:16px !important}
   [data-submit]{padding:17px !important}
@@ -448,9 +451,18 @@ img,svg,iframe{max-width:100%}
         <h2 style="font-family:'Unbounded';font-weight:700;font-size:clamp(26px,3.2vw,38px);letter-spacing:-.03em;line-height:1.06;margin:0 0 12px">Запишитесь на <span style="position:relative;white-space:nowrap;color:#E5392E">бесплатную диагностику<svg viewBox="0 0 240 30" preserveAspectRatio="none" style="position:absolute;left:-2%;right:-2%;bottom:-9px;width:104%;height:15px;overflow:visible"><path d="M6 18 C 70 4, 150 28, 234 10" fill="none" stroke="#F5B916" stroke-width="7" stroke-linecap="round"/></svg></span></h2>
         <p style="color:#6f6a64;line-height:1.6;font-size:16px;margin:0;text-wrap:pretty">Проверим чтение, внимание, память и&#160;понимание текста. После заявки пришлём полезный подарок для занятий дома.</p>
         <div data-formgrid style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:24px">
-          <input id="f_name" placeholder="Ваше имя" style="width:100%;border:1px solid #DDD0B8;border-radius:10px;padding:15px 16px;font:inherit;font-size:15px;background:#fff;outline:0" style-focus="border-color:var(--accent,#2E6BE0)">
-          <input id="f_phone" inputMode="tel" placeholder="+7 (___) ___-__-__" style="width:100%;border:1px solid #DDD0B8;border-radius:10px;padding:15px 16px;font:inherit;font-size:15px;background:#fff;outline:0" style-focus="border-color:var(--accent,#2E6BE0)">
-          <input id="f_age" inputMode="numeric" placeholder="Возраст ребёнка" style="grid-column:1/-1;width:100%;border:1px solid #DDD0B8;border-radius:10px;padding:15px 16px;font:inherit;font-size:15px;background:#fff;outline:0" style-focus="border-color:var(--accent,#2E6BE0)">
+          <div class="form-field" data-field="name">
+            <input id="f_name" name="Имя" placeholder="Ваше имя" style="width:100%;border:1px solid #DDD0B8;border-radius:10px;padding:15px 16px;font:inherit;font-size:15px;background:#fff;outline:0" style-focus="border-color:var(--accent,#2E6BE0)">
+            <div class="field-error" data-error-for="name" hidden></div>
+          </div>
+          <div class="form-field" data-field="phone">
+            <input id="f_phone" name="Телефон" inputMode="tel" placeholder="+7 (___) ___-__-__" style="width:100%;border:1px solid #DDD0B8;border-radius:10px;padding:15px 16px;font:inherit;font-size:15px;background:#fff;outline:0" style-focus="border-color:var(--accent,#2E6BE0)">
+            <div class="field-error" data-error-for="phone" hidden></div>
+          </div>
+          <div class="form-field" data-field="age" style="grid-column:1/-1">
+            <input id="f_age" name="Возраст ребёнка" inputMode="numeric" placeholder="Возраст ребёнка" style="width:100%;border:1px solid #DDD0B8;border-radius:10px;padding:15px 16px;font:inherit;font-size:15px;background:#fff;outline:0" style-focus="border-color:var(--accent,#2E6BE0)">
+            <div class="field-error" data-error-for="age" hidden></div>
+          </div>
           <button type="button" id="f_submit" data-submit style="grid-column:1/-1;width:100%;border:0;cursor:pointer;padding:16px;border-radius:10px;font-family:'Onest';font-weight:700;font-size:16px;color:#fff;background:#E5392E;box-shadow:0 12px 26px rgba(229,57,46,.32);transition:background .18s" style-hover="background:#cf2f25">Записаться и&#160;получить подарок</button>
         </div>
         <div style="font-size:12.5px;color:#9b9590;margin-top:12px;line-height:1.55">Нажимая кнопку, вы соглашаетесь на <a href="../privacy.html" style="color:var(--accent,#2E6BE0);text-decoration:underline;text-underline-offset:2px">обработку персональных данных</a>.</div>
@@ -529,6 +541,6 @@ img,svg,iframe{max-width:100%}
   document.querySelectorAll('[style-active]').forEach(function(el){var extra=el.getAttribute('style-active');if(!extra)return;var base=el.getAttribute('style')||'';el.addEventListener('mousedown',function(){el.setAttribute('style',base+';'+extra);});el.addEventListener('mouseup',function(){el.setAttribute('style',base);});el.addEventListener('mouseleave',function(){el.setAttribute('style',base);});});
 })();
 </script>
-<script src="./form.js"></script>
+<script src="../form.js"></script>
 </body>
 </html>

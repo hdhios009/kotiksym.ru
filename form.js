@@ -1,4 +1,4 @@
-/** Kotiksym — единый обработчик заявок (v3) */
+/** Kotiksym — единый обработчик заявок (v4) */
 (function () {
   'use strict';
   var GAS = 'https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec';
@@ -18,21 +18,41 @@
     '/angliyskiy-yazyk/': 'Английский для детей',
     '/podgotovka-k-shkole/': 'Подготовка к школе',
     '/pamyat-i-vnimanie/': 'Память и внимание',
-    '/logika-i-myshlenie/': 'Логика и мышление'
+    '/logika-i-myshlenie/': 'Логика и мышление',
+    '/kalligrafiya-gramotnost/': 'Каллиграфия и грамотность'
   };
-  function pick(s) { for(var i=0;i<s.length;i++){var e=document.querySelector(s[i]);if(e)return e;}return null; }
+  function pick(s) { for (var i = 0; i < s.length; i++) { var e = document.querySelector(s[i]); if (e) return e; } return null; }
 
-  // ── Error display ──
+  // ── Error display (field-scoped) ──
   function showFieldError(form, fieldName, message) {
+    if (!form) return;
     var error = form.querySelector('[data-error-for="' + fieldName + '"]');
     var field = form.querySelector('[data-field="' + fieldName + '"]');
     if (error) {
       error.textContent = message;
-      error.style.display = message ? 'block' : 'none';
+      error.hidden = !message;
     }
     if (field) {
       field.classList.toggle('has-error', Boolean(message));
     }
+  }
+
+  function clearAllFieldErrors(form) {
+    showFieldError(form, 'name', '');
+    showFieldError(form, 'phone', '');
+    showFieldError(form, 'age', '');
+  }
+
+  function getFieldInput(form, fieldName) {
+    var field = form.querySelector('[data-field="' + fieldName + '"]');
+    if (!field) return null;
+    return field.querySelector('input, select, textarea');
+  }
+
+  function isAgeRequired(form) {
+    var ageInput = getFieldInput(form, 'age') || document.getElementById('f_age');
+    if (!ageInput) return false;
+    return ageInput.required || ageInput.getAttribute('aria-required') === 'true' || ageInput.hasAttribute('data-required');
   }
 
   // ── Form setup ──
@@ -40,65 +60,42 @@
     var form = document.querySelector('[data-formgrid]');
     if (!form) return;
 
-    var fields = {
-      name: document.getElementById('f_name'),
-      phone: document.getElementById('f_phone'),
-      age: document.getElementById('f_age')
-    };
+    var nameInput = getFieldInput(form, 'name') || document.getElementById('f_name');
+    var phoneInput = getFieldInput(form, 'phone') || document.getElementById('f_phone');
+    var ageInput = getFieldInput(form, 'age') || document.getElementById('f_age');
 
-    // Wrap each field in [data-field] with [data-error-for] container
-    ['name', 'phone', 'age'].forEach(function (fn) {
-      var input = fields[fn];
-      if (!input) return;
-
-      // Create wrapper preserving grid layout
-      var wrapper = document.createElement('div');
-      wrapper.setAttribute('data-field', fn);
-      wrapper.style.cssText = 'display:contents';
-
-      // Create error container
-      var error = document.createElement('div');
-      error.setAttribute('data-error-for', fn);
-      // Age needs full width; name and phone auto-place in their 1fr column
-      var base = 'color:#e53935;font-size:12px;line-height:1.3;display:none;';
-      if (fn === 'age') base += 'grid-column:1/-1;';
-      error.style.cssText = base;
-
-      // Insert wrapper before input, move input inside, append error
-      input.parentNode.insertBefore(wrapper, input);
-      wrapper.appendChild(input);
-      wrapper.appendChild(error);
-
-      // Clear error on input
-      input.addEventListener('input', function () {
-        showFieldError(form, fn, '');
+    if (nameInput) {
+      nameInput.addEventListener('input', function () {
+        showFieldError(form, 'name', '');
       });
-    });
-
-    // Phone mask on the phone input
-    if (fields.phone) {
-      initPhoneMask(fields.phone);
+    }
+    if (phoneInput) {
+      phoneInput.addEventListener('input', function () {
+        showFieldError(form, 'phone', '');
+      });
+      initPhoneMask(phoneInput);
+    }
+    if (ageInput) {
+      ageInput.addEventListener('input', function () {
+        showFieldError(form, 'age', '');
+      });
     }
   }
 
   // ── Phone input mask ──
   function initPhoneMask(p) {
-    // Set attributes
     p.type = 'tel';
     p.inputMode = 'numeric';
     p.autocomplete = 'tel';
     p.placeholder = '+7 (___) ___-__-__';
-    // Format on input
     p.addEventListener('input', function () {
       formatPhoneInput(p);
     });
-    // Handle paste
     p.addEventListener('paste', function (e) {
       var pasted = (e.clipboardData || window.clipboardData).getData('text');
       var digits = pasted.replace(/\D/g, '');
       if (digits.length > 0) {
         e.preventDefault();
-        // Normalise full number paste
         if (digits.length === 11 && digits[0] === '8') {
           digits = digits.slice(1);
         } else if (digits.length === 11 && digits[0] === '7') {
@@ -116,7 +113,6 @@
         p.dispatchEvent(evt);
       }
     });
-    // Focus: position after +7
     p.addEventListener('focus', function () {
       if (p.value === '' || p.value === '+7') {
         p.value = '+7 ';
@@ -126,7 +122,6 @@
         if (raw.length <= 1) setCaret(p, p.value.length);
       }
     });
-    // Backspace protection
     p.addEventListener('keydown', function (e) {
       if (e.key === 'Backspace' && p.selectionStart <= 3) {
         e.preventDefault();
@@ -172,7 +167,6 @@
     }
   }
 
-  // Strip formatting → +7XXXXXXXXXX
   function rawPhone(val) {
     var d = (val || '').replace(/\D/g, '');
     if (d.length < 2) return '';
@@ -189,9 +183,9 @@
 
   // ── Collect form fields ──
   function collect() {
-    var n = pick(['[name="name"]', 'input[placeholder*="Ваше имя"]', 'input[placeholder*="ваше имя"]']);
-    var p = pick(['[name="phone"]', 'input[inputMode="tel"]']);
-    var a = pick(['[name="age"]', 'input[placeholder*="Возраст"]']);
+    var n = pick(['#f_name', '[name="Имя"]', '[name="name"]', 'input[placeholder*="Ваше имя"]', 'input[placeholder*="ваше имя"]']);
+    var p = pick(['#f_phone', '[name="Телефон"]', '[name="phone"]', 'input[inputMode="tel"]']);
+    var a = pick(['#f_age', '[name="Возраст ребёнка"]', '[name="age"]', 'input[placeholder*="Возраст"]']);
     var path = window.location.pathname;
     var href = location.href;
     var title = document.title;
@@ -201,7 +195,6 @@
     var phone = rawPhone(p ? p.value : '');
     var age = (a ? a.value : '').trim() || '';
     var f = {
-      // English fields
       name: name,
       phone: phone,
       age: age,
@@ -209,7 +202,6 @@
       page_path: path,
       page_title: title,
       page_label: label,
-      // Russian fields
       'Имя': name,
       'Телефон': phone,
       'Возраст ребёнка': age,
@@ -218,9 +210,8 @@
       'Заголовок страницы': title,
       'Источник заявки': label,
       'Источник (referrer)': document.referrer || 'прямой заход',
-      // Metadata
       lead_id: Date.now() + '_' + Math.random().toString(36).slice(2, 10),
-      request_source: 'form_js_v3'
+      request_source: 'form_js_v4'
     };
     ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid']
       .forEach(function (k) { var v = q.get(k); if (v) f[k] = v; });
@@ -228,11 +219,11 @@
   }
 
   function clearInputs() {
-    var n = document.getElementById('f_name') || pick(['[name="name"]']);
-    var p = document.getElementById('f_phone') || pick(['input[inputMode="tel"]']);
-    var a = document.getElementById('f_age') || pick(['input[placeholder*="Возраст"]']);
+    var n = document.getElementById('f_name') || pick(['[name="Имя"]', '[name="name"]']);
+    var p = document.getElementById('f_phone') || pick(['[name="Телефон"]', 'input[inputMode="tel"]']);
+    var a = document.getElementById('f_age') || pick(['[name="Возраст ребёнка"]', 'input[placeholder*="Возраст"]']);
     if (n) n.value = '';
-    if (p) { p.value = ''; }
+    if (p) p.value = '';
     if (a) a.value = '';
   }
 
@@ -261,12 +252,10 @@
     var form = document.querySelector('[data-formgrid]');
     var f = collect();
     var name = f['Имя'],
-      phone = f['Телефон'];
+      phone = f['Телефон'],
+      age = f['Возраст ребёнка'];
 
-    // Clear all errors before validation
-    showFieldError(form, 'name', '');
-    showFieldError(form, 'phone', '');
-    showFieldError(form, 'age', '');
+    clearAllFieldErrors(form);
 
     if (name.length < 2) {
       showFieldError(form, 'name', 'Введите имя');
@@ -274,6 +263,10 @@
     }
     if (!phoneOK(phone)) {
       showFieldError(form, 'phone', 'Введите номер полностью');
+      return;
+    }
+    if (isAgeRequired(form) && !age) {
+      showFieldError(form, 'age', 'Укажите возраст ребёнка');
       return;
     }
 
@@ -289,6 +282,7 @@
         btn.style.opacity = '1';
         busy = false;
         clearInputs();
+        clearAllFieldErrors(form);
         var m = document.getElementById('successModal');
         if (m) m.style.display = 'grid';
         if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
@@ -304,7 +298,6 @@
     setTimeout(function () { busy = false; }, CD);
   }
 
-  // ── Init ──
   function init() {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', setupForm);
@@ -314,5 +307,5 @@
   }
   init();
   document.addEventListener('click', onClick);
-  console.log('Kotiksym form v3 loaded');
+  console.log('Kotiksym form v4 loaded');
 })();
