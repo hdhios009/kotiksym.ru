@@ -1,7 +1,7 @@
 /** Kotiksym — единый обработчик заявок (v4) */
 (function () {
   'use strict';
-  var GAS = 'https://script.google.com/macros/s/AKfycbxWCMJrj-TVPRNRhs9cxDoj99CHjknicaNPexk6ZXfw1Hi3BcAj-q9hnR2Tv0TaYOd-/exec';
+  var GAS = 'https://script.google.com/macros/s/AKfycbx4NvxPBhVSNW0tXSuH50QYLfgdjqszZqffId_ee56L0QVbcbmHtXAEpMjamt5gADdL/exec';
   var TIMEOUT = 18000;
   var CD = 5000;
   var busy = false;
@@ -77,12 +77,28 @@
     }
     if (ageInput) {
       ageInput.addEventListener('input', function () {
+        var cleaned = (ageInput.value || '').replace(/\D/g, '');
+        if (cleaned !== ageInput.value) ageInput.value = cleaned;
         showFieldError(form, 'age', '');
+      });
+      ageInput.addEventListener('keydown', function (e) {
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        if (e.key.length === 1 && !/[0-9]/.test(e.key)) e.preventDefault();
       });
     }
   }
 
   // ── Phone input mask ──
+  // National 10 digits only (without country code). +7 is always the display prefix.
+  function toNationalDigits(value) {
+    var digits = String(value || '').replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits[0] === '8') digits = '7' + digits.slice(1);
+    if (digits[0] === '7') digits = digits.slice(1);
+    if (digits.length > 10) digits = digits.slice(0, 10);
+    return digits;
+  }
+
   function initPhoneMask(p) {
     p.type = 'tel';
     p.inputMode = 'numeric';
@@ -93,19 +109,9 @@
     });
     p.addEventListener('paste', function (e) {
       var pasted = (e.clipboardData || window.clipboardData).getData('text');
-      var digits = pasted.replace(/\D/g, '');
-      if (digits.length > 0) {
+      var digits = toNationalDigits(pasted);
+      if (digits.length > 0 || String(pasted || '').replace(/\D/g, '').length > 0) {
         e.preventDefault();
-        if (digits.length === 11 && digits[0] === '8') {
-          digits = digits.slice(1);
-        } else if (digits.length === 11 && digits[0] === '7') {
-          digits = digits.slice(1);
-        } else if (digits.length === 10) {
-          // keep
-        } else if (digits.length > 11) {
-          digits = digits.slice(-10);
-        }
-        if (digits.length > 10) digits = digits.slice(0, 10);
         var masked = maskPhone(digits);
         p.value = masked;
         setCaret(p, masked.length);
@@ -118,21 +124,26 @@
         p.value = '+7 ';
         setCaret(p, 3);
       } else {
-        var raw = (p.value || '').replace(/\D/g, '');
-        if (raw.length <= 1) setCaret(p, p.value.length);
+        var national = toNationalDigits(p.value);
+        if (national.length === 0) setCaret(p, p.value.length);
       }
     });
     p.addEventListener('keydown', function (e) {
-      if (e.key === 'Backspace' && p.selectionStart <= 3) {
+      if (e.key === 'Backspace' && p.selectionStart <= 3 && p.selectionEnd <= 3) {
         e.preventDefault();
         if (p.setSelectionRange) p.setSelectionRange(3, 3);
+        return;
+      }
+      // Allow editing shortcuts and navigation; block letters/symbols
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.key.length === 1 && !/[0-9]/.test(e.key)) {
+        e.preventDefault();
       }
     });
   }
 
   function maskPhone(digits) {
-    digits = digits.replace(/\D/g, '');
-    if (digits.length > 10) digits = digits.slice(0, 10);
+    digits = toNationalDigits(digits);
     var r = '+7 ';
     if (digits.length > 0) r += '(' + digits.slice(0, 3);
     if (digits.length > 3) r += ') ' + digits.slice(3, 6);
@@ -142,12 +153,8 @@
   }
 
   function formatPhoneInput(p) {
-    var raw = (p.value || '').replace(/\D/g, '');
-    if (raw.length > 1) {
-      if (raw[0] === '8') raw = '7' + raw.slice(1);
-      if (raw.length > 1 && raw[0] === '7') raw = raw.slice(1);
-    }
-    var masked = maskPhone(raw);
+    var national = toNationalDigits(p.value);
+    var masked = maskPhone(national);
     if (masked !== p.value) {
       var oldLen = p.value.length;
       var oldPos = p.selectionStart;
@@ -168,17 +175,13 @@
   }
 
   function rawPhone(val) {
-    var d = (val || '').replace(/\D/g, '');
-    if (d.length < 2) return '';
-    if (d[0] === '8') d = '7' + d.slice(1);
-    if (d.length === 10 && d[0] !== '7') d = '7' + d;
-    if (d.length > 11) d = d.slice(0, 11);
-    return '+' + d;
+    var national = toNationalDigits(val);
+    if (!national) return '';
+    return '+7' + national;
   }
 
   function phoneOK(v) {
-    var d = (v || '').replace(/\D/g, '');
-    return d.length === 11 && d[0] === '7';
+    return toNationalDigits(v).length === 10;
   }
 
   // ── Collect form fields ──
