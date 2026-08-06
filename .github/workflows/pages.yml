@@ -38,3 +38,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # First Actions deploy after switching from legacy can exceed the default 10m wait.
+          timeout: 1800000
