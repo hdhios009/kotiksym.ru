@@ -33,7 +33,16 @@ img,svg,iframe,video{max-width:100%}
 *{min-width:0}
 @media (max-width:768px){
   .wrap{width:calc(100% - 32px) !important;margin:0 auto !important}
-  h1,h2,h3,p,li,a,span,div{overflow-wrap:break-word}
+  main.wrap{padding-top:28px !important;padding-bottom:48px !important}
+  h1{font-size:clamp(26px,7vw,36px) !important;line-height:1.12 !important}
+  h2{font-size:20px !important;margin-top:28px !important}
+  p,li{font-size:16px !important;line-height:1.6 !important}
+  h1,h2,h3,p,li,a,span,div{overflow-wrap:anywhere;word-break:break-word}
+  a{overflow-wrap:anywhere}
+  header a{min-height:44px;display:inline-flex;align-items:center}
+}
+@media (max-width:380px){
+  .wrap{width:calc(100% - 22px) !important}
 }
 /* ===== /MOBILE FIX ===== */
 </style>
