@@ -26,14 +26,31 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/110489022" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <style id="mobile-fix">
-/* ===== MOBILE FIX (consent) ===== */
+/* ===== MOBILE FIX v4 (legal) ===== */
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 img,svg,iframe,video{max-width:100%}
 *{min-width:0}
+[data-nav-burger],[data-mobile-nav],[data-nav-actions]{display:none}
 @media (max-width:768px){
   .wrap{width:calc(100% - 32px) !important;margin:0 auto !important}
-  h1,h2,h3,p,li,a,span,div{overflow-wrap:break-word}
+  main.wrap{padding-top:28px !important;padding-bottom:48px !important}
+  h1{font-size:clamp(26px,7vw,36px) !important;line-height:1.12 !important}
+  h2{font-size:20px !important;margin-top:28px !important}
+  p,li{font-size:16px !important;line-height:1.6 !important}
+  h1,h2,h3,p,li{overflow-wrap:break-word}
+  main a{overflow-wrap:anywhere;word-break:break-word}
+  a[href^="tel:"]{white-space:nowrap}
+  [data-nav-back]{display:none !important}
+  [data-nav-actions]{display:flex !important;align-items:center;gap:8px}
+  [data-nav-burger]{display:inline-flex !important;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid #E4D8C2;border-radius:10px;background:#fff;cursor:pointer;padding:0;color:#1C1B29}
+  [data-mobile-nav]{display:none;position:absolute;left:0;right:0;top:calc(100% + 1px);z-index:60;flex-direction:column;gap:2px;padding:10px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:0 0 14px 14px;box-shadow:0 14px 30px rgba(28,27,41,.1)}
+  [data-mobile-nav].is-open{display:flex !important}
+  [data-mobile-nav] a{display:flex;align-items:center;min-height:44px;padding:10px 12px;border-radius:10px;font-weight:600;font-size:16px;color:#1C1B29;text-decoration:none}
+  html.nav-open,html.nav-open body{overflow:hidden}
+}
+@media (max-width:380px){
+  .wrap{width:calc(100% - 22px) !important}
 }
 /* ===== /MOBILE FIX ===== */
 </style>
@@ -58,12 +75,20 @@ img,svg,iframe,video{max-width:100%}
 
 <div style="position:relative">
   <header style="background:#FBF4E8;border-bottom:1px solid #E4D8C2">
-    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;padding:16px 0">
+    <div class="wrap" style="position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 0">
       <a href="/" style="display:flex;align-items:center;gap:11px;text-decoration:none">
         <span style="width:40px;height:40px;border-radius:11px;background:#fff;border:1px solid #E4D8C2;display:grid;place-items:center;overflow:hidden"><img src="../images/logo.jpg" alt="КотиксУМ" style="width:34px;height:34px;object-fit:contain"/></span>
         <strong style="font-family:'Unbounded';font-weight:700;font-size:17px;letter-spacing:-.02em">КотиксУМ</strong>
       </a>
-      <a href="/" style="font-size:14.5px;color:#43413c;text-decoration:none" style-hover="color:#3B4FE0">← На главную</a>
+      <a href="/" data-nav-back style="font-size:14.5px;color:#43413c;text-decoration:none" style-hover="color:#3B4FE0">← На главную</a>
+      <div data-nav-actions>
+        <button type="button" data-nav-burger aria-expanded="false" aria-controls="site-mobile-nav" aria-label="Открыть меню"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      </div>
+      <div id="site-mobile-nav" data-mobile-nav hidden>
+        <a href="/">На главную</a>
+        <a href="/#form">Записаться</a>
+        <a href="/#contacts">Контакты</a>
+      </div>
     </div>
   </header>
 
@@ -111,5 +136,6 @@ img,svg,iframe,video{max-width:100%}
   </main>
 </div>
 </x-dc>
+<script src="../mobile-nav.js"></script>
 </body>
 </html>
