@@ -35,41 +35,43 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/110489022" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <style id="mobile-fix">
-/* ===== MOBILE FIX v3 — мобильная композиция ===== */
+/* ===== MOBILE FIX v4 — composition + nav ===== */
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 img,svg,iframe,video{max-width:100%}
 *{min-width:0}
+[data-nav-actions]{display:flex;align-items:center;gap:8px}
+[data-nav-burger],[data-mobile-nav]{display:none}
 @media (max-width:768px){
   img{height:auto !important}
   .wrap{width:calc(100% - 32px) !important;margin:0 auto !important}
-  /* сетки — в одну колонку */
   [data-hero-grid],[data-dirs],[data-choose],[data-live],[data-reviews],[data-offer],[data-gallery],[data-contacts],[data-pain],[data-why],[data-diag],[data-ba],[data-proof]{grid-template-columns:1fr !important}
-  /* первый экран */
   [data-hero]{padding-top:22px !important;padding-bottom:28px !important}
-  [data-hero]>[aria-hidden="true"]{display:none !important}     /* декор, вылезающий за экран */
-  /* Watermark SVG text behind H1 — quieter on phones for contrast */
+  [data-hero]>[aria-hidden="true"]{display:none !important}
   div[style*="--curve-op"]{--curve-op:.22 !important;--grain-op:.28 !important}
   [data-hero-grid]{gap:22px !important}
-  [data-h1]{font-size:clamp(27px,7.4vw,40px) !important;line-height:1.1 !important}
-  /* Long blue/red accent spans used white-space:nowrap and were clipped by overflow-x */
+  [data-h1]{font-size:clamp(27px,7.4vw,36px) !important;line-height:1.12 !important;overflow-wrap:break-word}
   [data-h1] span,#form h2 span{white-space:normal !important}
   [data-h1] span>svg,#form h2 span>svg{display:none !important}
-  [data-h1]{overflow-wrap:anywhere}
-  header a[href="#form"]{min-height:44px !important;padding:12px 18px !important}
-  [data-cta] a,[data-hero-cta] a,[data-submit]{min-height:48px !important}
+  h1,h2,h3,[data-reviews] p,[data-pain] p,[data-why] p,[data-diag] p,[data-ba] p,article p,.form-field label,#form p,[data-footer] p{overflow-wrap:break-word}
+  h1,h2,h3{text-wrap:balance}
+  a[href^="tel:"]{white-space:nowrap}
   [data-photo]{max-width:100% !important;margin:0 auto !important}
   [data-diagline]{white-space:normal !important;font-size:clamp(19px,5.4vw,26px) !important;line-height:1.15 !important}
-  /* компактная статистика 600+/7–14/до 6 */
   [data-proof]>div{display:flex !important;align-items:baseline !important;gap:10px !important;border-right:0 !important;border-bottom:1px solid #E4D8C2 !important}
   [data-proof]>div:last-child{border-bottom:0 !important}
   [data-proof] span{margin-top:0 !important}
-  /* шапка */
+  /* header / burger */
   [data-nav-links],[data-nav-metro],[data-navsub]{display:none !important}
-  /* кнопки на всю ширину, одна под другой */
+  [data-nav-actions]{display:flex !important;align-items:center;gap:8px;margin-left:auto;flex:0 0 auto}
+  [data-nav-burger]{display:inline-flex !important;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid #E4D8C2;border-radius:10px;background:#fff;cursor:pointer;padding:0;color:#1C1B29}
+  [data-nav-cta]{min-height:44px !important;padding:12px 16px !important;white-space:nowrap !important}
+  [data-mobile-nav]{display:none;position:absolute;left:0;right:0;top:calc(100% + 1px);z-index:60;flex-direction:column;gap:2px;padding:10px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:0 0 14px 14px;box-shadow:0 14px 30px rgba(28,27,41,.1)}
+  [data-mobile-nav].is-open{display:flex !important}
+  [data-mobile-nav] a{display:flex;align-items:center;min-height:44px;padding:10px 12px;border-radius:10px;font-weight:600;font-size:16px;color:#1C1B29;text-decoration:none}
+  [data-mobile-nav] a[data-mobile-cta]{display:none;justify-content:center;background:var(--accent,#2E6BE0);color:#fff;margin-top:4px}
   [data-hero-cta]{flex-direction:column !important;gap:10px !important}
-  [data-hero-cta]>a,[data-cta]>a,[data-submit]{width:100% !important;justify-content:center !important;text-align:center !important}
-  /* форма */
+  [data-hero-cta]>a,[data-cta]>a,[data-submit]{width:100% !important;justify-content:center !important;text-align:center !important;min-height:48px !important}
   .form-field{display:flex;flex-direction:column;gap:4px;min-width:0}
   .field-error{color:#e53935;font-size:12px;line-height:1.3}
   .field-error[hidden]{display:none!important}
@@ -78,23 +80,22 @@ img,svg,iframe,video{max-width:100%}
   [data-submit]{padding:17px !important}
   #form{padding:24px !important}
   [data-offer]>div{padding:24px !important}
-  [data-price]{font-size:clamp(40px,12vw,54px) !important}
-  /* компактнее секции и заголовки блоков */
+  [data-price]{font-size:clamp(40px,12vw,54px) !important;line-height:1 !important}
   [data-sec]{padding-top:40px !important;padding-bottom:40px !important}
   [data-head]{margin-bottom:22px !important}
-  /* короче страница: прячем второстепенное */
-  .wrap:has([data-gallery]){display:none !important}   /* большая галерея */
-  .wrap:has([data-live]){display:none !important}       /* «живой центр» — дублирует «почему доверяют» */
-  section:last-of-type{display:none !important}          /* блок внутренних «частых запросов» */
-  /* отзывы: оставляем 2, остальные прячем */
+  .wrap:has([data-gallery]){display:none !important}
+  .wrap:has([data-live]){display:none !important}
+  section:last-of-type{display:none !important}
   [data-reviews]>*:nth-child(n+3){display:none !important}
-  /* ничего не обрезается */
-  h1,h2,h3,p,li,a,span,div{overflow-wrap:break-word}
-  h1,h2,h3{text-wrap:balance}
+  html.nav-open,html.nav-open body{overflow:hidden}
+}
+@media (max-width:360px){
+  [data-nav-cta]{display:none !important}
+  [data-mobile-nav] a[data-mobile-cta]{display:flex !important}
 }
 @media (max-width:380px){
   .wrap{width:calc(100% - 22px) !important}
-  [data-h1]{font-size:clamp(25px,8vw,34px) !important}
+  [data-h1]{font-size:clamp(25px,8vw,32px) !important}
   [data-diagline]{font-size:19px !important}
   #form{padding:20px !important}
   [data-sec]{padding-top:34px !important;padding-bottom:34px !important}
@@ -174,47 +175,26 @@ img,svg,iframe,video{max-width:100%}
     [data-reviews]{grid-template-columns:1fr 1fr!important}
     [data-dirs],[data-choose]{grid-template-columns:1fr 1fr!important}
     [data-proof]{grid-template-columns:1fr 1fr 1fr!important}
-    [data-pain]{grid-template-columns:1fr 1fr!important}
-    [data-why]{grid-template-columns:1fr 1fr!important}
+    [data-pain],[data-why]{grid-template-columns:1fr 1fr!important}
     [data-diag],[data-ba]{grid-template-columns:1fr!important}
     [data-head]{display:block!important}
     [data-head] p{margin-top:14px!important}
     [data-footer]{flex-direction:column;align-items:flex-start!important;gap:14px}
   }
+  @media (max-width:768px){
+    /* Reinforces #mobile-fix after @960 so phone grids stay 1-col */
+    [data-pain],[data-why],[data-gallery],[data-dirs],[data-choose],[data-reviews],[data-live],[data-proof]{grid-template-columns:1fr!important}
+  }
   @media (max-width:640px){
     *{-webkit-tap-highlight-color:rgba(229,57,46,.12)}
-    [data-reviews]{grid-template-columns:1fr!important}
-    [data-live]{grid-template-columns:1fr!important}
-    [data-pain],[data-why]{grid-template-columns:1fr!important}
-    [data-dirs],[data-choose]{grid-template-columns:1fr!important}
-    [data-gallery]{grid-template-columns:1fr!important;gap:10px!important}
     [data-sec]{padding-top:44px!important;padding-bottom:44px!important}
     [data-hero]{padding-top:28px!important;padding-bottom:34px!important}
-    [data-formgrid]{grid-template-columns:1fr!important}
-    [data-h1]{font-size:clamp(26px,7vw,34px)!important;line-height:1.12!important}
-    /* Long accent phrases must wrap; desktop keeps inline nowrap */
-    [data-h1] span,#form h2 span{white-space:normal!important}
-    [data-h1] span>svg,#form h2 span>svg{display:none!important}
-    [data-proof]{grid-template-columns:1fr!important}
-    [data-proof]>div{display:flex!important;align-items:baseline!important;gap:12px!important;border-right:0!important;border-bottom:1px solid #E4D8C2!important}
-    [data-proof]>div:last-child{border-bottom:0!important}
-    [data-proof] span{margin-top:0!important}
-    [data-price]{font-size:clamp(40px,12vw,52px)!important;line-height:1!important}
-    /* Кнопки во всю ширину и удобные для пальца */
-    [data-hero-cta]{flex-direction:column!important;gap:10px!important}
-    [data-hero-cta] a{width:100%!important;justify-content:center!important;padding:16px 20px!important;font-size:16px!important;min-height:48px!important}
+    [data-hero-cta] a,[data-cta] a{padding:16px 20px!important;font-size:16px!important}
     [data-cta]{margin-top:26px!important}
-    [data-cta] a{width:100%!important;justify-content:center!important;text-align:center!important;min-height:48px!important;padding:16px 20px!important}
-    header a[href="#form"]{min-height:44px!important;padding:12px 18px!important;align-items:center!important}
-    input,[data-submit]{font-size:16px!important}
-    [data-submit]{padding:17px!important;min-height:48px!important}
-    /* Карта повыше на телефоне */
     [data-contacts]>a,[data-contacts]>div:last-child{min-height:260px!important}
     [data-footer] a{display:inline-flex!important;min-height:44px!important;align-items:center!important}
   }
   @media (max-width:430px){
-    [data-pain],[data-why]{grid-template-columns:1fr!important}
-    [data-gallery]{grid-template-columns:1fr!important}
     .wrap{width:calc(100% - 28px)}
     [data-navsub]{display:none!important}
     [data-reviews] article{padding:22px!important}
@@ -249,7 +229,7 @@ img,svg,iframe,video{max-width:100%}
 
   <!-- NAV -->
   <header style="position:sticky;top:0;z-index:40;background:#FBF4E8;border-bottom:1px solid #E4D8C2">
-    <nav class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0">
+    <nav class="wrap" style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0">
       <a href="#top" style="display:flex;align-items:center;gap:11px">
         <span style="width:42px;height:42px;border-radius:11px;background:#fff;border:1px solid #E4D8C2;display:grid;place-items:center;overflow:hidden"><img src="../images/logo.jpg" alt="КотиксУМ" style="width:36px;height:36px;object-fit:contain"/></span>
         <span style="line-height:1.05"><strong style="display:block;font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:17px;letter-spacing:-.02em">КотиксУМ</strong><span style="display:block;color:#857f78;font-size:11.5px;margin-top:3px" data-navsub>детский центр интеллекта</span></span>
@@ -261,7 +241,18 @@ img,svg,iframe,video{max-width:100%}
         <a href="#reviews" style="transition:.15s" style-hover="color:var(--accent,#2E6BE0)">Отзывы</a>
         <a href="#price" style="transition:.15s" style-hover="color:var(--accent,#2E6BE0)">Стоимость</a>
       </div>
-      <a href="#form" style="display:inline-flex;align-items:center;padding:11px 19px;border-radius:10px;font-weight:600;font-size:14.5px;color:#fff;background:var(--accent,#2E6BE0)">Записаться</a>
+      <div data-nav-actions>
+        <button type="button" data-nav-burger aria-expanded="false" aria-controls="site-mobile-nav" aria-label="Открыть меню"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <a href="#form" data-nav-cta style="display:inline-flex;align-items:center;padding:11px 19px;border-radius:10px;font-weight:600;font-size:14.5px;color:#fff;background:var(--accent,#2E6BE0)">Записаться</a>
+      </div>
+      <div id="site-mobile-nav" data-mobile-nav hidden>
+        <a href="#pain">Признаки</a>
+        <a href="#diag">Диагностика</a>
+        <a href="#result">Результаты</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#price">Стоимость</a>
+        <a href="#form" data-mobile-cta>Записаться</a>
+      </div>
     </nav>
   </header>
 
@@ -574,6 +565,7 @@ img,svg,iframe,video{max-width:100%}
   });
 })();
 </script>
+<script src="../mobile-nav.js"></script>
 <script src="../form.js"></script>
 </body>
 </html>
