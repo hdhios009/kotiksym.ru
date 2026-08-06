@@ -27,17 +27,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Prepare publish directory
+        run: |
+          mkdir -p _publish
+          # Upload only the public site (exclude git metadata and this workflow tree).
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='_publish/' \
+            --exclude='.gitignore' \
+            ./ _publish/
+          # Keep .nojekyll for any legacy/fallback publish paths.
+          touch _publish/.nojekyll
+          find _publish -type f | wc -l
+          du -sh _publish
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: _publish
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          # First Actions deploy after switching from legacy can exceed the default 10m wait.
-          timeout: 1800000
+          # Backend hard-caps around 10 minutes; larger values do not help.
+          timeout: 600000
