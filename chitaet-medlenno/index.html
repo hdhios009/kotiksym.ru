@@ -48,7 +48,12 @@ img,svg,iframe,video{max-width:100%}
   [data-hero-grid],[data-dirs],[data-choose],[data-live],[data-reviews],[data-offer],[data-gallery],[data-contacts],[data-pain],[data-why],[data-diag],[data-ba],[data-proof]{grid-template-columns:1fr !important}
   [data-hero]{padding-top:22px !important;padding-bottom:28px !important}
   [data-hero]>[aria-hidden="true"]{display:none !important}
-  div[style*="--curve-op"]{--curve-op:.22 !important;--grain-op:.28 !important}
+  /* Kill watermark behind hero copy — blue accents were hard to read on phones */
+  div[style*="--curve-op"]{--curve-op:0 !important;--grain-op:.12 !important}
+  div[style*="--curve-op"] > div[style*="position:fixed"]:first-of-type{opacity:0 !important}
+  [data-h1]{color:#14131f !important}
+  [data-h1] span{color:#1A4DB8 !important;-webkit-text-fill-color:#1A4DB8 !important}
+  [data-h1],[data-h1] span{text-shadow:0 1px 0 rgba(251,244,232,.95),0 0 18px rgba(251,244,232,.9)}
   [data-hero-grid]{gap:22px !important}
   [data-h1]{font-size:clamp(27px,7.4vw,36px) !important;line-height:1.12 !important;overflow-wrap:break-word}
   [data-h1] span,#form h2 span{white-space:normal !important}
