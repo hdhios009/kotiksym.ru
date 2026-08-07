@@ -1,27 +1,124 @@
-/** Kotiksym — единый обработчик заявок (v4) */
+/** Kotiksym — единый обработчик заявок (v5) */
 (function () {
   'use strict';
-  var GAS = 'https://script.google.com/macros/s/AKfycbx4NvxPBhVSNW0tXSuH50QYLfgdjqszZqffId_ee56L0QVbcbmHtXAEpMjamt5gADdL/exec';
+
+  if (window.__kotiksymFormInit) return;
+  window.__kotiksymFormInit = true;
+
+  var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycby87hWuo9uuhgNc2Lc16C_AnwFB9zVyvh5DTcOUhYVVMD_MaE2YvZtE1otrStmnxDyoJg/exec';
+  var ATTR_KEY = 'kotiksym_attribution';
+  var ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid', 'gclid'];
   var TIMEOUT = 18000;
   var CD = 5000;
+  var ERR_MSG = 'Не удалось отправить заявку. Попробуйте ещё раз.';
   var busy = false;
   var LABELS = {
     '/': 'Главная КотиксУМ',
-    '/ne-ponimaet-tekst/': 'Не понимает текст',
-    '/domashka-do-vechera/': 'Домашка до вечера',
-    '/ne-mozhet-pereskazat/': 'Не может пересказать',
     '/chitaet-medlenno/': 'Медленно читает',
-    '/zabyvaet-prochitannoe/': 'Забывает текст',
+    '/ne-ponimaet-tekst/': 'Не понимает текст',
+    '/ne-mozhet-pereskazat/': 'Не может пересказать',
+    '/domashka-do-vechera/': 'Домашка до вечера',
+    '/zabyvaet-prochitannoe/': 'Забывает прочитанное',
     '/boitsya-otvechat/': 'Боится отвечать',
-    '/oshibki-po-nevnimatelnosti/': 'Ошибки по вниманию',
-    '/skorochtenie-deti/': 'Скорочтение детям',
-    '/angliyskiy-yazyk/': 'Английский для детей',
+    '/oshibki-po-nevnimatelnosti/': 'Ошибки по невнимательности',
+    '/skorochtenie-deti/': 'Скорочтение',
     '/podgotovka-k-shkole/': 'Подготовка к школе',
+    '/angliyskiy-yazyk/': 'Английский язык',
     '/pamyat-i-vnimanie/': 'Память и внимание',
     '/logika-i-myshlenie/': 'Логика и мышление',
     '/kalligrafiya-gramotnost/': 'Каллиграфия и грамотность'
   };
-  function pick(s) { for (var i = 0; i < s.length; i++) { var e = document.querySelector(s[i]); if (e) return e; } return null; }
+
+  function pick(s) {
+    for (var i = 0; i < s.length; i++) {
+      var e = document.querySelector(s[i]);
+      if (e) return e;
+    }
+    return null;
+  }
+
+  function normalizePath(pathname) {
+    var path = pathname || '/';
+    if (path === '/index.html') return '/';
+    if (path.length > 1 && path.slice(-1) !== '/') path += '/';
+    return path;
+  }
+
+  function pageName() {
+    var path = normalizePath(window.location.pathname);
+    return LABELS[path] || document.title || path;
+  }
+
+  function readStoredAttr() {
+    try {
+      var raw = sessionStorage.getItem(ATTR_KEY);
+      if (!raw) return {};
+      var parsed = JSON.parse(raw);
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function writeStoredAttr(obj) {
+    try {
+      sessionStorage.setItem(ATTR_KEY, JSON.stringify(obj || {}));
+    } catch (e) {}
+  }
+
+  function captureAttribution() {
+    var q = new URLSearchParams(window.location.search);
+    var stored = readStoredAttr();
+    var next = {};
+    var i, key, urlVal, storedVal;
+    var hasNew = false;
+
+    for (i = 0; i < ATTR_KEYS.length; i++) {
+      key = ATTR_KEYS[i];
+      urlVal = q.get(key);
+      if (urlVal != null && String(urlVal).trim() !== '') {
+        next[key] = String(urlVal);
+        hasNew = true;
+      }
+    }
+
+    if (hasNew) {
+      for (i = 0; i < ATTR_KEYS.length; i++) {
+        key = ATTR_KEYS[i];
+        storedVal = stored[key];
+        if (next[key] == null || next[key] === '') {
+          next[key] = storedVal != null ? String(storedVal) : '';
+        }
+      }
+      writeStoredAttr(next);
+      return next;
+    }
+
+    for (i = 0; i < ATTR_KEYS.length; i++) {
+      key = ATTR_KEYS[i];
+      next[key] = stored[key] != null ? String(stored[key]) : '';
+    }
+    return next;
+  }
+
+  function resolveAttribution() {
+    var q = new URLSearchParams(window.location.search);
+    var stored = readStoredAttr();
+    var out = {};
+    var i, key, urlVal;
+    for (i = 0; i < ATTR_KEYS.length; i++) {
+      key = ATTR_KEYS[i];
+      urlVal = q.get(key);
+      if (urlVal != null && String(urlVal).trim() !== '') {
+        out[key] = String(urlVal);
+      } else if (stored[key] != null && String(stored[key]).trim() !== '') {
+        out[key] = String(stored[key]);
+      } else {
+        out[key] = '';
+      }
+    }
+    return out;
+  }
 
   // ── Error display (field-scoped) ──
   function showFieldError(form, fieldName, message) {
@@ -55,10 +152,30 @@
     return ageInput.required || ageInput.getAttribute('aria-required') === 'true' || ageInput.hasAttribute('data-required');
   }
 
+  function ensureHoneypot(form) {
+    if (!form || form.querySelector('input[name="website"]')) return;
+    var wrap = document.createElement('div');
+    wrap.setAttribute('aria-hidden', 'true');
+    wrap.style.cssText = 'position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;';
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'website';
+    input.id = 'f_website';
+    input.tabIndex = -1;
+    input.autocomplete = 'off';
+    input.setAttribute('autofill', 'off');
+    input.value = '';
+    wrap.appendChild(input);
+    form.style.position = form.style.position || 'relative';
+    form.appendChild(wrap);
+  }
+
   // ── Form setup ──
   function setupForm() {
     var form = document.querySelector('[data-formgrid]');
     if (!form) return;
+
+    ensureHoneypot(form);
 
     var nameInput = getFieldInput(form, 'name') || document.getElementById('f_name');
     var phoneInput = getFieldInput(form, 'phone') || document.getElementById('f_phone');
@@ -134,7 +251,6 @@
         if (p.setSelectionRange) p.setSelectionRange(3, 3);
         return;
       }
-      // Allow editing shortcuts and navigation; block letters/symbols
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.key.length === 1 && !/[0-9]/.test(e.key)) {
         e.preventDefault();
@@ -184,16 +300,17 @@
     return toNationalDigits(v).length === 10;
   }
 
+  function honeypotValue() {
+    var hp = document.querySelector('#f_website, input[name="website"]');
+    return hp ? String(hp.value || '') : '';
+  }
+
   // ── Collect form fields ──
   function collect() {
     var n = pick(['#f_name', '[name="Имя"]', '[name="name"]', 'input[placeholder*="Ваше имя"]', 'input[placeholder*="ваше имя"]']);
     var p = pick(['#f_phone', '[name="Телефон"]', '[name="phone"]', 'input[inputMode="tel"]']);
     var a = pick(['#f_age', '[name="Возраст ребёнка"]', '[name="age"]', 'input[placeholder*="Возраст"]']);
-    var path = window.location.pathname;
-    var href = location.href;
-    var title = document.title;
-    var label = LABELS[path] || title || path;
-    var q = new URLSearchParams(location.search);
+    var attr = resolveAttribution();
     var name = (n ? n.value : '').trim();
     var phone = rawPhone(p ? p.value : '');
     var age = (a ? a.value : '').trim() || '';
@@ -201,23 +318,18 @@
       name: name,
       phone: phone,
       age: age,
-      page_url: href,
-      page_path: path,
-      page_title: title,
-      page_label: label,
-      'Имя': name,
-      'Телефон': phone,
-      'Возраст ребёнка': age,
-      'Страница заявки': href,
-      'Путь страницы': path,
-      'Заголовок страницы': title,
-      'Источник заявки': label,
-      'Источник (referrer)': document.referrer || 'прямой заход',
-      lead_id: Date.now() + '_' + Math.random().toString(36).slice(2, 10),
-      request_source: 'form_js_v4'
+      page_url: window.location.href,
+      page_name: pageName(),
+      referrer: document.referrer || '',
+      utm_source: attr.utm_source || '',
+      utm_medium: attr.utm_medium || '',
+      utm_campaign: attr.utm_campaign || '',
+      utm_content: attr.utm_content || '',
+      utm_term: attr.utm_term || '',
+      yclid: attr.yclid || '',
+      gclid: attr.gclid || '',
+      website: honeypotValue()
     };
-    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid']
-      .forEach(function (k) { var v = q.get(k); if (v) f[k] = v; });
     return f;
   }
 
@@ -230,20 +342,57 @@
     if (a) a.value = '';
   }
 
-  function send(fields, ok, fail) {
-    var f = document.createElement('form');
-    f.method = 'POST'; f.action = GAS; f.target = 'kf'; f.style.display = 'none';
-    for (var k in fields) {
-      if (!fields.hasOwnProperty(k)) continue;
-      var i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = String(fields[k]); f.appendChild(i);
+  function setBusy(btn, on, origText) {
+    if (!btn) return;
+    if (on) {
+      btn.textContent = 'Отправляем…';
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+      busy = true;
+    } else {
+      btn.textContent = origText;
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      busy = false;
     }
-    var ifr = document.getElementById('kf');
-    if (!ifr) { ifr = document.createElement('iframe'); ifr.id = 'kf'; ifr.name = 'kf'; ifr.style.display = 'none'; document.body.appendChild(ifr); }
-    var done = false,
-      timer = setTimeout(function () { if (!done) { done = true; fail('Сервер не отвечает. Попробуйте ещё раз.'); } }, TIMEOUT);
-    ifr.onload = function () { if (!done) { done = true; clearTimeout(timer); ok(); } };
-    document.body.appendChild(f); f.submit();
-    setTimeout(function () { try { if (f.parentNode) f.parentNode.removeChild(f); } catch (e) {} }, 300);
+  }
+
+  function send(fields) {
+    var payload = new URLSearchParams();
+    Object.keys(fields).forEach(function (k) {
+      payload.set(k, fields[k] == null ? '' : String(fields[k]));
+    });
+
+    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = null;
+    var req = fetch(GAS_ENDPOINT, {
+      method: 'POST',
+      body: payload,
+      signal: controller ? controller.signal : undefined
+    });
+
+    var timeoutPromise = new Promise(function (_, reject) {
+      timer = setTimeout(function () {
+        if (controller) controller.abort();
+        reject(new Error('timeout'));
+      }, TIMEOUT);
+    });
+
+    return Promise.race([req, timeoutPromise]).then(function (res) {
+      clearTimeout(timer);
+      return res.text().then(function (text) {
+        var data = null;
+        try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; }
+        if (res.ok && data && data.ok === true) return data;
+        // Readable non-ok JSON / unexpected body
+        throw new Error('bad_response');
+      });
+    }).catch(function (err) {
+      clearTimeout(timer);
+      // Opaque / CORS-read failures are unlikely here (endpoint allows CORS),
+      // but if POST reached the server and browser blocks body, treat network-only failures as error.
+      throw err;
+    });
   }
 
   function onClick(e) {
@@ -254,9 +403,9 @@
 
     var form = document.querySelector('[data-formgrid]');
     var f = collect();
-    var name = f['Имя'],
-      phone = f['Телефон'],
-      age = f['Возраст ребёнка'];
+    var name = f.name;
+    var phone = f.phone;
+    var age = f.age;
 
     clearAllFieldErrors(form);
 
@@ -274,41 +423,47 @@
     }
 
     var orig = btn.textContent;
-    btn.textContent = 'Отправляем…';
-    btn.disabled = true;
-    btn.style.opacity = '0.7';
-    busy = true;
-    send(f,
-      function () {
-        btn.textContent = orig;
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        busy = false;
-        clearInputs();
-        clearAllFieldErrors(form);
-        var m = document.getElementById('successModal');
-        if (m) m.style.display = 'grid';
-        if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
-      },
-      function (msg) {
-        btn.textContent = orig;
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        busy = false;
-        if (msg) alert(msg);
-      }
-    );
-    setTimeout(function () { busy = false; }, CD);
+    setBusy(btn, true, orig);
+
+    send(f).then(function () {
+      clearInputs();
+      clearAllFieldErrors(form);
+      var m = document.getElementById('successModal');
+      if (m) m.style.display = 'grid';
+      if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
+      // Keep momentary lock against instant resubmit; then restore button.
+      setTimeout(function () {
+        setBusy(btn, false, orig);
+      }, CD);
+    }).catch(function () {
+      setBusy(btn, false, orig);
+      alert(ERR_MSG);
+    });
   }
 
   function init() {
+    captureAttribution();
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', setupForm);
     } else {
       setupForm();
     }
   }
+
   init();
   document.addEventListener('click', onClick);
-  console.log('Kotiksym form v4 loaded');
+
+  // Test/debug hook (no UI impact)
+  window.__kotiksymForm = {
+    GAS_ENDPOINT: GAS_ENDPOINT,
+    LABELS: LABELS,
+    collect: collect,
+    captureAttribution: captureAttribution,
+    resolveAttribution: resolveAttribution,
+    pageName: pageName,
+    normalizePath: normalizePath,
+    ATTR_KEY: ATTR_KEY
+  };
+
+  console.log('Kotiksym form v5 loaded');
 })();
