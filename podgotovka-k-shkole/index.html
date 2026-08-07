@@ -42,6 +42,16 @@ img,svg,iframe{max-width:100%}
 *{min-width:0}
 [data-nav-actions]{display:flex;align-items:center;gap:8px}
 [data-nav-burger],[data-mobile-nav]{display:none}
+/* Desktop/tablet: long H1 accents must wrap inside the text column, not slide under the photo */
+[data-hero-grid]>*{min-width:0}
+[data-h1]{overflow-wrap:break-word}
+[data-h1] span{
+  white-space:normal !important;
+  color:#1A4DB8 !important;
+  -webkit-text-fill-color:#1A4DB8 !important;
+  text-shadow:0 1px 0 rgba(251,244,232,.92),0 0 16px rgba(251,244,232,.8);
+}
+[data-h1] span>svg{display:none !important}
 @media (max-width:768px){
   img{height:auto !important}
   .wrap{width:calc(100% - 32px) !important;margin:0 auto !important}
