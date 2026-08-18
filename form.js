@@ -146,6 +146,31 @@
     return field.querySelector('input, select, textarea');
   }
 
+
+  function getAgeBounds(ageInput) {
+    if (!ageInput) return null;
+    var minRaw = ageInput.getAttribute('min');
+    var maxRaw = ageInput.getAttribute('max');
+    if (minRaw == null && maxRaw == null) return null;
+    var min = minRaw != null && minRaw !== '' ? parseInt(minRaw, 10) : null;
+    var max = maxRaw != null && maxRaw !== '' ? parseInt(maxRaw, 10) : null;
+    return {
+      min: min != null && !isNaN(min) ? min : null,
+      max: max != null && !isNaN(max) ? max : null
+    };
+  }
+
+  function ageInRange(ageInput, age) {
+    if (!age) return true;
+    var n = parseInt(String(age).replace(/\D/g, ''), 10);
+    if (isNaN(n)) return false;
+    var bounds = getAgeBounds(ageInput);
+    if (!bounds) return true;
+    if (bounds.min != null && n < bounds.min) return false;
+    if (bounds.max != null && n > bounds.max) return false;
+    return true;
+  }
+
   function isAgeRequired(form) {
     var ageInput = getFieldInput(form, 'age') || document.getElementById('f_age');
     if (!ageInput) return false;
@@ -419,6 +444,14 @@
     }
     if (isAgeRequired(form) && !age) {
       showFieldError(form, 'age', 'Укажите возраст ребёнка');
+      return;
+    }
+    var ageInput = getFieldInput(form, 'age') || document.getElementById('f_age');
+    if (age && !ageInRange(ageInput, age)) {
+      var bounds = getAgeBounds(ageInput) || {};
+      var min = bounds.min != null ? bounds.min : 4;
+      var max = bounds.max != null ? bounds.max : 16;
+      showFieldError(form, 'age', 'Возраст ребёнка — от ' + min + ' до ' + max + ' лет');
       return;
     }
 
