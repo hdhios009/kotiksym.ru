@@ -9,7 +9,9 @@
 
   function goal(name) {
     if (!name || typeof ym !== 'function') return;
-    ym(YM_ID, 'reachGoal', name);
+    try {
+      ym(YM_ID, 'reachGoal', name);
+    } catch (e) {}
   }
 
   document.addEventListener('click', function (e) {
@@ -21,16 +23,30 @@
     var href = (el.getAttribute('href') || '').trim();
     var cta = el.getAttribute('data-cta') || '';
     var dir = el.getAttribute('data-direction') || '';
+    var isGift =
+      cta === 'gift' ||
+      href.indexOf('#gift') !== -1 ||
+      href.indexOf('kotiksymgiftbot') !== -1;
+    var isTel = href.indexOf('tel:') === 0;
+    var isTelegram =
+      !isGift &&
+      (href.indexOf('t.me/') !== -1 || href.indexOf('telegram.me/') !== -1);
+    var isMax = !isGift && href.indexOf('max.ru/') !== -1;
+    var isMap =
+      href.indexOf('yandex.ru/maps') !== -1 ||
+      href.indexOf('yandex.ru/map-widget') !== -1;
+    var isDiagnostic =
+      cta === 'diagnostic' || href === '#form' || href.indexOf('#form') !== -1;
 
-    if (cta === 'diagnostic' || href.indexOf('#form') !== -1) goal('cta_diagnostic_click');
-    if (cta === 'gift' || href.indexOf('#gift') !== -1) goal('gift_click');
+    if (isDiagnostic) goal('cta_diagnostic_click');
+    if (isGift) goal('gift_click');
     if (dir === 'skorochtenie') goal('direction_skorochtenie_click');
     if (dir === 'school') goal('direction_school_click');
     if (dir === 'english') goal('direction_english_click');
-    if (href.indexOf('tel:') === 0) goal('phone_click');
-    if (href.indexOf('t.me') !== -1 || href.indexOf('telegram') !== -1) goal('telegram_click');
-    if (href.indexOf('max.ru') !== -1) goal('max_click');
-    if (href.indexOf('yandex.ru/maps') !== -1) goal('map_click');
+    if (isTel) goal('phone_click');
+    if (isTelegram) goal('telegram_click');
+    if (isMax) goal('max_click');
+    if (isMap) goal('map_click');
   });
 
   var formRoot = document.getElementById('form');
