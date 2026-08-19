@@ -98,10 +98,6 @@ img,svg,iframe,video{max-width:100%}
   [data-price]{font-size:clamp(40px,12vw,54px) !important;line-height:1 !important}
   [data-sec]{padding-top:40px !important;padding-bottom:40px !important}
   [data-head]{margin-bottom:22px !important}
-  .wrap:has([data-gallery]){display:none !important}
-  .wrap:has([data-live]){display:none !important}
-  section:last-of-type{display:none !important}
-  [data-reviews]>*:nth-child(n+3){display:none !important}
   html.nav-open,html.nav-open body{overflow:hidden}
 }
 @media (max-width:360px){
@@ -220,7 +216,7 @@ img,svg,iframe,video{max-width:100%}
 <link rel="stylesheet" href="/responsive.css">
 
 
-<div style="position:relative;overflow:hidden;--accent:#2E6BE0;--curve-op:.95;--grain-op:.5">
+<div data-mobile-flow style="position:relative;overflow:hidden;--accent:#2E6BE0;--curve-op:.95;--grain-op:.5">
 
   <div style="position:fixed;inset:0;z-index:0;pointer-events:none;opacity:var(--curve-op,.95)">
     <svg viewBox="0 0 1440 1024" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;animation:drift 26s ease-in-out infinite">
@@ -325,10 +321,13 @@ img,svg,iframe,video{max-width:100%}
   </section>
 
   <!-- WHY HARD (light) -->
-  <section data-sec class="wrap" style="position:relative;z-index:2;padding:20px 0 60px">
+  <section data-flow="after-form" data-sec class="wrap" style="position:relative;z-index:2;padding:20px 0 60px">
     <div style="border:1px solid #E4D8C2;border-radius:20px;background:#FFFDF9;padding:clamp(28px,5vw,52px);max-width:900px">
       <h2 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(27px,3.8vw,44px);letter-spacing:-.03em;line-height:1.06;margin:0">Он не ленится. Ему нужна опора в&#160;учёбе.</h2>
-      <p style="font-size:19px;line-height:1.66;color:#43413c;margin:20px 0 0;max-width:60ch;text-wrap:pretty">Когда трудно читать, удерживать внимание или понимать задание, ребёнок устаёт и&#160;теряет уверенность. В&#160;КотиксУМ начинаем с&#160;диагностики и&#160;понятного плана.</p>
+<details class="mobile-details" open data-collapse="phone">
+<summary class="mobile-summary">Почему ребёнку может быть трудно</summary>
+<p style="font-size:19px;line-height:1.66;color:#43413c;margin:20px 0 0;max-width:60ch;text-wrap:pretty">Когда трудно читать, удерживать внимание или понимать задание, ребёнок устаёт и&#160;теряет уверенность. В&#160;КотиксУМ начинаем с&#160;диагностики и&#160;понятного плана.</p>
+</details>
     </div>
   </section>
 
@@ -342,9 +341,14 @@ img,svg,iframe,video{max-width:100%}
       <article style="display:flex;flex-direction:column;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:16px;padding:28px;border-top:5px solid #2E6BE0"><h3 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:600;font-size:21px;letter-spacing:-.02em;margin:0 0 10px">Скорочтение</h3><p style="margin:0 0 12px;color:#1C1B29;line-height:1.5;font-size:15px;font-weight:600">Прочитал → понял → запомнил → объяснил</p><p style="margin:0 0 20px;color:#6f6a64;line-height:1.5;font-size:15px">Легче читать учебный текст, удерживать главное и&#160;пересказывать своими словами.</p><a href="/skorochtenie-deti/" data-direction="skorochtenie" style="margin-top:auto;font-weight:600;font-size:15px;color:#2E6BE0">Подробнее&#160;→</a></article>
       <article style="display:flex;flex-direction:column;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:16px;padding:28px;border-top:5px solid #2FA96B"><h3 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:600;font-size:21px;letter-spacing:-.02em;margin:0 0 10px">Подготовка к&#160;школе</h3><p style="margin:0 0 12px;color:#1C1B29;line-height:1.5;font-size:15px;font-weight:600">Услышал → понял → удержал → сделал сам</p><p style="margin:0 0 20px;color:#6f6a64;line-height:1.5;font-size:15px">Учится понимать задание и&#160;выполнять его без постоянной подсказки взрослого.</p><a href="/podgotovka-k-shkole/" data-direction="school" style="margin-top:auto;font-weight:600;font-size:15px;color:#2E6BE0">Подробнее&#160;→</a></article>
       <article style="display:flex;flex-direction:column;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:16px;padding:28px;border-top:5px solid #E5392E"><h3 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:600;font-size:21px;letter-spacing:-.02em;margin:0 0 10px">Английский язык</h3><p style="margin:0 0 12px;color:#1C1B29;line-height:1.5;font-size:15px;font-weight:600">Услышал → понял → вспомнил → ответил</p><p style="margin:0 0 20px;color:#6f6a64;line-height:1.5;font-size:15px">Английский, которым ребёнок умеет пользоваться на&#160;уроке и&#160;в&#160;домашке.</p><a href="/angliyskiy-yazyk/" data-direction="english" style="margin-top:auto;font-weight:600;font-size:15px;color:#2E6BE0">Подробнее&#160;→</a></article>
-      <article style="display:flex;flex-direction:column;background:#F7F3EA;border:1px solid #E4D8C2;border-radius:16px;padding:22px 24px"><span style="font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#857f78;margin-bottom:8px">По диагностике</span><h3 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:600;font-size:18px;letter-spacing:-.02em;margin:0 0 8px">Память и&#160;внимание</h3><p style="margin:0 0 16px;color:#6f6a64;line-height:1.5;font-size:14px">Поддерживающий навык: удержание инструкции и&#160;концентрация.</p><a href="/pamyat-i-vnimanie/" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6BE0">Подробнее&#160;→</a></article>
-      <article style="display:flex;flex-direction:column;background:#F7F3EA;border:1px solid #E4D8C2;border-radius:16px;padding:22px 24px"><span style="font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#857f78;margin-bottom:8px">По диагностике</span><h3 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:600;font-size:18px;letter-spacing:-.02em;margin:0 0 8px">Логика и&#160;мышление</h3><p style="margin:0 0 16px;color:#6f6a64;line-height:1.5;font-size:14px">Дополнительно, если нужно разобрать условие и&#160;ход решения.</p><a href="/logika-i-myshlenie/" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6BE0">Подробнее&#160;→</a></article>
-      <article style="display:flex;flex-direction:column;background:#F7F3EA;border:1px solid #E4D8C2;border-radius:16px;padding:22px 24px"><span style="font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#857f78;margin-bottom:8px">По диагностике</span><h3 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:600;font-size:18px;letter-spacing:-.02em;margin:0 0 8px">Каллиграфия и&#160;грамотность</h3><p style="margin:0 0 16px;color:#6f6a64;line-height:1.5;font-size:14px">Дополнительно: аккуратность письма, если это видно на&#160;встрече.</p><a href="/kalligrafiya-gramotnost/" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6BE0">Подробнее&#160;→</a></article>
+      <details class="mobile-details" open data-collapse="phone">
+        <summary class="mobile-summary">Дополнительные направления</summary>
+        <div class="mobile-extra">
+        <article style="display:flex;flex-direction:column;background:#F7F3EA;border:1px solid #E4D8C2;border-radius:16px;padding:22px 24px"><span style="font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#857f78;margin-bottom:8px">По диагностике</span><h3 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:600;font-size:18px;letter-spacing:-.02em;margin:0 0 8px">Память и&#160;внимание</h3><p style="margin:0 0 16px;color:#6f6a64;line-height:1.5;font-size:14px">Поддерживающий навык: удержание инструкции и&#160;концентрация.</p><a href="/pamyat-i-vnimanie/" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6BE0">Подробнее&#160;→</a></article>
+        <article style="display:flex;flex-direction:column;background:#F7F3EA;border:1px solid #E4D8C2;border-radius:16px;padding:22px 24px"><span style="font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#857f78;margin-bottom:8px">По диагностике</span><h3 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:600;font-size:18px;letter-spacing:-.02em;margin:0 0 8px">Логика и&#160;мышление</h3><p style="margin:0 0 16px;color:#6f6a64;line-height:1.5;font-size:14px">Дополнительно, если нужно разобрать условие и&#160;ход решения.</p><a href="/logika-i-myshlenie/" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6BE0">Подробнее&#160;→</a></article>
+        <article style="display:flex;flex-direction:column;background:#F7F3EA;border:1px solid #E4D8C2;border-radius:16px;padding:22px 24px"><span style="font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#857f78;margin-bottom:8px">По диагностике</span><h3 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:600;font-size:18px;letter-spacing:-.02em;margin:0 0 8px">Каллиграфия и&#160;грамотность</h3><p style="margin:0 0 16px;color:#6f6a64;line-height:1.5;font-size:14px">Дополнительно: аккуратность письма, если это видно на&#160;встрече.</p><a href="/kalligrafiya-gramotnost/" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6BE0">Подробнее&#160;→</a></article>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -386,21 +390,27 @@ img,svg,iframe,video{max-width:100%}
   </section>
 
   <!-- LIVE CENTER -->
-  <section data-sec class="wrap" style="position:relative;z-index:2;padding:20px 0 60px">
+  <section data-flow="after-form" data-sec class="wrap" style="position:relative;z-index:2;padding:20px 0 60px">
     <div style="border:1px solid #E4D8C2;border-radius:20px;background:#FFFDF9;padding:clamp(28px,5vw,52px)">
       <h2 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(27px,3.8vw,44px);letter-spacing:-.03em;line-height:1.06;margin:0;max-width:22ch">Живой центр: педагог видит, где ребёнок теряется в&#160;задании</h2>
-      <p style="font-size:19px;line-height:1.6;color:#43413c;margin:18px 0 30px;max-width:66ch;text-wrap:pretty">На занятии педагог видит ребёнка лично: где теряется внимание, что мешает понимать задание и&#160;как помочь. Родитель получает <b style="color:#1C1B29;font-weight:600">понятную обратную связь</b>.</p>
       <div data-live style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div style="padding:26px;border-radius:16px;background:#FFFDF9;border:1px solid #E4D8C2;display:flex;gap:12px;align-items:flex-start"><svg width="20" height="20" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:2px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div style="font-weight:700;font-size:16px;margin-bottom:5px">Видим каждого ребёнка</div><span style="color:#6f6a64;line-height:1.5;font-size:14.5px">Замечаем, где ребёнку трудно, и&#160;объясняем родителю простыми словами.</span></div></div>
+      <details class="mobile-details" open data-collapse="narrow">
+        <summary class="mobile-summary">Больше о центре</summary>
+        <div class="mobile-extra">
+        <p style="font-size:19px;line-height:1.6;color:#43413c;margin:18px 0 30px;max-width:66ch;text-wrap:pretty">На занятии педагог видит ребёнка лично: где теряется внимание, что мешает понимать задание и&#160;как помочь. Родитель получает <b style="color:#1C1B29;font-weight:600">понятную обратную связь</b>.</p>
+
+      <div style="padding:26px;border-radius:16px;background:#FFFDF9;border:1px solid #E4D8C2;display:flex;gap:12px;align-items:flex-start"><svg width="20" height="20" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:2px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div style="font-weight:700;font-size:16px;margin-bottom:5px">Видим каждого ребёнка</div><span style="color:#6f6a64;line-height:1.5;font-size:14.5px">Замечаем, где ребёнку трудно, и&#160;объясняем родителю простыми словами.</span></div></div>
         <div style="padding:26px;border-radius:16px;background:#FFFDF9;border:1px solid #E4D8C2;display:flex;gap:12px;align-items:flex-start"><svg width="20" height="20" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:2px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div style="font-weight:700;font-size:16px;margin-bottom:5px">Понятная обратная связь</div><span style="color:#6f6a64;line-height:1.5;font-size:14.5px">Родитель получает конкретику после занятий, а&#160;не общие слова.</span></div></div>
         <div style="padding:26px;border-radius:16px;background:#FFFDF9;border:1px solid #E4D8C2;display:flex;gap:12px;align-items:flex-start"><svg width="20" height="20" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:2px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div style="font-weight:700;font-size:16px;margin-bottom:5px">Мини-группы до&#160;6&#160;детей</div><span style="color:#6f6a64;line-height:1.5;font-size:14.5px">Педагог успевает к&#160;каждому и&#160;ведёт по&#160;его уровню.</span></div></div>
         <div style="padding:26px;border-radius:16px;background:#FFFDF9;border:1px solid #E4D8C2;display:flex;gap:12px;align-items:flex-start"><svg width="20" height="20" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:2px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div style="font-weight:700;font-size:16px;margin-bottom:5px">Офлайн у&#160;м.&#160;Планерная</div><span style="color:#6f6a64;line-height:1.5;font-size:14.5px">Живой контакт и&#160;внимание к&#160;каждому ребёнку.</span></div></div>
-      </div>
+        </div>
+      </details>
+    </div>
     </div>
   </section>
 
   <!-- WHY -->
-  <section data-sec class="wrap" style="position:relative;z-index:2;padding:60px 0">
+  <section data-flow="after-form" data-sec class="wrap" style="position:relative;z-index:2;padding:60px 0">
     <div data-head style="display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:34px">
       <h2 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(28px,4.2vw,48px);letter-spacing:-.035em;line-height:1.04;margin:0">Почему родители выбирают КотиксУМ</h2>
       <p style="font-size:17px;line-height:1.6;color:#6f6a64;max-width:36ch;margin:0;text-wrap:pretty">Системный центр, внимательный к&#160;каждому ребёнку — это видно с&#160;первой встречи.</p>
@@ -409,33 +419,48 @@ img,svg,iframe,video{max-width:100%}
       <div style="border-radius:14px;padding:26px;background:#FFFDF9;border:1px solid #E4D8C2"><b style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:40px;letter-spacing:-.05em;display:block;color:#E5392E;margin-bottom:9px">8</b><span style="font-weight:600;font-size:17px;letter-spacing:-.01em;display:block;margin-bottom:9px">лет опыта</span><p style="margin:0;color:#6f6a64;line-height:1.45;font-size:14px">на чтении, внимании и&#160;мышлении</p></div>
       <div style="border-radius:14px;padding:26px;background:#FFFDF9;border:1px solid #E4D8C2"><b style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:40px;letter-spacing:-.05em;display:block;color:#E5392E;margin-bottom:9px">6</b><span style="font-weight:600;font-size:17px;letter-spacing:-.01em;display:block;margin-bottom:9px">детей максимум</span><p style="margin:0;color:#6f6a64;line-height:1.45;font-size:14px">в мини-группе — педагог видит каждого</p></div>
       <div style="border-radius:14px;padding:26px;background:#FFFDF9;border:1px solid #E4D8C2"><b style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:40px;letter-spacing:-.05em;display:block;color:#E5392E;margin-bottom:9px">1</b><span style="font-weight:600;font-size:17px;letter-spacing:-.01em;display:block;margin-bottom:9px">понятный план</span><p style="margin:0;color:#6f6a64;line-height:1.45;font-size:14px">после диагностики — для родителя</p></div>
-      <div style="border-radius:14px;padding:26px;background:#FFFDF9;border:1px solid #E4D8C2"><b style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:40px;letter-spacing:-.05em;display:block;color:#E5392E;margin-bottom:9px">5.0</b><span style="font-weight:600;font-size:17px;letter-spacing:-.01em;display:block;margin-bottom:9px">рейтинг центра</span><p style="margin:0;color:#6f6a64;line-height:1.45;font-size:14px">по&#160;отзывам родителей на&#160;Яндекс&#160;Картах</p></div>
+      <details class="mobile-details" open data-collapse="phone">
+        <summary class="mobile-summary">Ещё преимущества</summary>
+        <div class="mobile-extra">
+        <div style="border-radius:14px;padding:26px;background:#FFFDF9;border:1px solid #E4D8C2"><b style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:40px;letter-spacing:-.05em;display:block;color:#E5392E;margin-bottom:9px">5.0</b><span style="font-weight:600;font-size:17px;letter-spacing:-.01em;display:block;margin-bottom:9px">рейтинг центра</span><p style="margin:0;color:#6f6a64;line-height:1.45;font-size:14px">по&#160;отзывам родителей на&#160;Яндекс&#160;Картах</p></div>
+        </div>
+      </details>
     </div>
     <div data-choose style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px">
-      <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><span style="color:#F5B916;font-size:15px;flex:0 0 auto;margin-top:1px">★</span><span style="font-weight:600;font-size:15px;line-height:1.35">Рейтинг 5.0 на&#160;Яндекс&#160;Картах</span></div>
+      <details class="mobile-details" open data-collapse="narrow">
+        <summary class="mobile-summary">Ещё доказательства</summary>
+        <div class="mobile-extra">
+        <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><span style="color:#F5B916;font-size:15px;flex:0 0 auto;margin-top:1px">★</span><span style="font-weight:600;font-size:15px;line-height:1.35">Рейтинг 5.0 на&#160;Яндекс&#160;Картах</span></div>
       <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Реальные отзывы родителей</span></div>
       <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">600+ детей прошли обучение</span></div>
-      <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">8 лет опыта</span></div>
-      <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Мини-группы до&#160;6&#160;детей</span></div>
-      <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Подробная обратная связь родителям</span></div>
-      <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Бесплатная первая диагностика</span></div>
-      <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Офлайн-занятия у&#160;м.&#160;Планерная</span></div>
-      <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Педагог работает с&#160;уровнем ребёнка</span></div>
+        <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">8 лет опыта</span></div>
+        <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Мини-группы до&#160;6&#160;детей</span></div>
+        <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Подробная обратная связь родителям</span></div>
+        <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Бесплатная первая диагностика</span></div>
+        <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Офлайн-занятия у&#160;м.&#160;Планерная</span></div>
+        <div style="display:flex;gap:11px;align-items:flex-start;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:18px"><svg width="18" height="18" viewBox="0 0 16 16" style="flex:0 0 auto;margin-top:1px"><path d="M3 8.5 L6.5 12 L13 4.5" fill="none" stroke="#2FA96B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-weight:600;font-size:15px;line-height:1.35">Педагог работает с&#160;уровнем ребёнка</span></div>
+        </div>
+      </details>
     </div>
     <div data-cta style="display:flex;justify-content:center;margin-top:32px"><a href="#form" style="display:inline-flex;align-items:center;padding:16px 32px;border-radius:10px;font-weight:700;font-size:16px;color:#fff;background:#E5392E;box-shadow:0 12px 26px rgba(229,57,46,.3);transition:background .18s" style-hover="background:#cf2f25">Записаться на&#160;бесплатную диагностику</a></div>
   </section>
 
   <!-- GALLERY -->
-  <section data-sec class="wrap" style="position:relative;z-index:2;padding:60px 0">
+  <section data-flow="after-form" data-sec class="wrap" style="position:relative;z-index:2;padding:60px 0">
     <div data-head style="display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:34px">
       <h2 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(28px,4.2vw,48px);letter-spacing:-.035em;line-height:1.04;margin:0">Как у нас на&#160;занятиях</h2>
       <p style="font-size:17px;line-height:1.6;color:#6f6a64;max-width:36ch;margin:0;text-wrap:pretty">Светлый кабинет, мини-группы и&#160;педагог, который видит каждого ребёнка.</p>
     </div>
     <div data-gallery style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
       <div style="border:1px solid #E4D8C2;border-radius:16px;background:#FFFDF9;padding:10px"><img src="images/class.jpg" alt="Занятие с педагогом в КотиксУМ" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:10px;aspect-ratio:4/3"/></div>
-      <div style="border:1px solid #E4D8C2;border-radius:16px;background:#FFFDF9;padding:10px"><img src="images/kids-read.jpg" alt="Дети читают на занятии" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:10px;aspect-ratio:4/3"/></div>
-      <div style="border:1px solid #E4D8C2;border-radius:16px;background:#FFFDF9;padding:10px"><img src="images/kid-write.jpg" alt="Мальчик выполняет задание" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:10px;aspect-ratio:4/3"/></div>
-      <div style="border:1px solid #E4D8C2;border-radius:16px;background:#FFFDF9;padding:10px"><img src="images/boy-new.jpg" alt="Ученик КотиксУМ на занятии" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:10px;aspect-ratio:4/3"/></div>
+      <details class="mobile-details" open data-collapse="narrow">
+        <summary class="mobile-summary">Посмотреть ещё фото</summary>
+        <div class="mobile-extra">
+        <div style="border:1px solid #E4D8C2;border-radius:16px;background:#FFFDF9;padding:10px"><img src="images/kids-read.jpg" alt="Дети читают на занятии" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:10px;aspect-ratio:4/3" loading="lazy"/></div>
+        <div style="border:1px solid #E4D8C2;border-radius:16px;background:#FFFDF9;padding:10px"><img src="images/kid-write.jpg" alt="Мальчик выполняет задание" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:10px;aspect-ratio:4/3" loading="lazy"/></div>
+        <div style="border:1px solid #E4D8C2;border-radius:16px;background:#FFFDF9;padding:10px"><img src="images/boy-new.jpg" alt="Ученик КотиксУМ на занятии" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:10px;aspect-ratio:4/3" loading="lazy"/></div>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -458,24 +483,29 @@ img,svg,iframe,video{max-width:100%}
         <div style="font-weight:600;font-size:16px;line-height:1.4;margin-bottom:12px;color:#1C1B29">«Небольшие группы и&#160;разносторонние задания»</div>
         <p style="margin:0;color:#6f6a64;line-height:1.55;font-size:14px;text-wrap:pretty">Ходим второй месяц, ребёнку очень нравится, группы действительно небольшие. Педагог много делает с&#160;детьми: на&#160;логику, память, счёт, внимательность. Спасибо за&#160;такой подход.</p>
       </article>
-      <article style="background:#FFFDF9;border:1px solid #E4D8C2;border-radius:16px;padding:26px">
+      <details class="mobile-details" open data-collapse="narrow">
+        <summary class="mobile-summary">Ещё отзывы</summary>
+        <div class="mobile-extra">
+        <article style="background:#FFFDF9;border:1px solid #E4D8C2;border-radius:16px;padding:26px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px"><b style="font-size:15.5px">Ольга И.</b><span style="font-size:12.5px;color:#9b9590">22 октября 2025</span></div>
         <div style="color:#F5B916;letter-spacing:2px;font-size:15px;margin-bottom:14px">★★★★★</div>
         <div style="font-weight:600;font-size:16px;line-height:1.4;margin-bottom:12px;color:#1C1B29">«Бесплатное пробное и&#160;живая обратная связь педагогов»</div>
         <p style="margin:0;color:#6f6a64;line-height:1.55;font-size:14px;text-wrap:pretty">Администратор подбирает время, начиная с&#160;пробного занятия — оно бесплатное. Педагоги молодые, но&#160;высококвалифицированные, прислушиваются к&#160;ребёнку. Однозначно рекомендую.</p>
       </article>
+        </div>
+      </details>
     </div>
   </section>
 
   
   <!-- FAQ -->
-  <section id="faq" data-sec class="wrap" style="position:relative;z-index:2;padding:60px 0">
+  <section data-flow="after-form" id="faq" data-sec class="wrap" style="position:relative;z-index:2;padding:60px 0">
     <div data-head style="margin-bottom:34px"><h2 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(28px,4.2vw,48px);letter-spacing:-.035em;line-height:1.04;margin:0">Частые вопросы</h2></div>
-    <div style="display:grid;gap:12px;max-width:900px"><div style="background:#FFFDF9;border:1px solid #E4D8C2;border-radius:14px;padding:22px 24px"><div style="font-weight:700;font-size:17px;margin-bottom:8px;letter-spacing:-.01em">Какие направления есть в КотиксУМ?</div><div style="color:#6f6a64;line-height:1.55;font-size:15px">Основные: скорочтение, подготовка к школе и английский. Дополнительно развиваем память и внимание; логика и каллиграфия — по необходимости.</div></div><div style="background:#FFFDF9;border:1px solid #E4D8C2;border-radius:14px;padding:22px 24px"><div style="font-weight:700;font-size:17px;margin-bottom:8px;letter-spacing:-.01em">Сколько стоит диагностика?</div><div style="color:#6f6a64;line-height:1.55;font-size:15px">Диагностика бесплатная — 0 ₽.</div></div><div style="background:#FFFDF9;border:1px solid #E4D8C2;border-radius:14px;padding:22px 24px"><div style="font-weight:700;font-size:17px;margin-bottom:8px;letter-spacing:-.01em">Сколько длится диагностика?</div><div style="color:#6f6a64;line-height:1.55;font-size:15px">Обычно 40–60 минут.</div></div><div style="background:#FFFDF9;border:1px solid #E4D8C2;border-radius:14px;padding:22px 24px"><div style="font-weight:700;font-size:17px;margin-bottom:8px;letter-spacing:-.01em">С какого возраста можно заниматься?</div><div style="color:#6f6a64;line-height:1.55;font-size:15px">Для скорочтения обычно 4–16 лет. Для подготовки к школе и других направлений возраст уточним на диагностике.</div></div><div style="background:#FFFDF9;border:1px solid #E4D8C2;border-radius:14px;padding:22px 24px"><div style="font-weight:700;font-size:17px;margin-bottom:8px;letter-spacing:-.01em">Где проходит занятие?</div><div style="color:#6f6a64;line-height:1.55;font-size:15px">В детском центре КотиксУМ у м. Планерная, Северное Тушино.</div></div><div style="background:#FFFDF9;border:1px solid #E4D8C2;border-radius:14px;padding:22px 24px"><div style="font-weight:700;font-size:17px;margin-bottom:8px;letter-spacing:-.01em">Что даёт первая диагностика?</div><div style="color:#6f6a64;line-height:1.55;font-size:15px">Педагог смотрит навыки ребёнка по запросу и даёт родителю понятную обратную связь и план.</div></div></div>
+    <div style="display:grid;gap:12px;max-width:900px"><details class="faq-item" open data-keep-open><summary>Какие направления есть в КотиксУМ?</summary><div class="faq-answer">Основные: скорочтение, подготовка к школе и английский. Дополнительно развиваем память и внимание; логика и каллиграфия — по необходимости.</div></details><details class="faq-item" open><summary>Сколько стоит диагностика?</summary><div class="faq-answer">Диагностика бесплатная — 0 ₽.</div></details><details class="faq-item" open><summary>Сколько длится диагностика?</summary><div class="faq-answer">Обычно 40–60 минут.</div></details><details class="faq-item" open><summary>С какого возраста можно заниматься?</summary><div class="faq-answer">Для скорочтения обычно 4–16 лет. Для подготовки к школе и других направлений возраст уточним на диагностике.</div></details><details class="faq-item" open><summary>Где проходит занятие?</summary><div class="faq-answer">В детском центре КотиксУМ у м. Планерная, Северное Тушино.</div></details><details class="faq-item" open><summary>Что даёт первая диагностика?</summary><div class="faq-answer">Педагог смотрит навыки ребёнка по запросу и даёт родителю понятную обратную связь и план.</div></details></div>
   </section>
 
   <!-- GIFT -->
-  <section id="gift" data-sec class="wrap" style="position:relative;z-index:2;padding:20px 0 40px">
+  <section data-flow="after-form" id="gift" data-sec class="wrap" style="position:relative;z-index:2;padding:20px 0 40px">
     <div style="display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;background:#FFFDF9;border:1px solid #E4D8C2;border-left:4px solid #F5B916;border-radius:18px;padding:clamp(22px,4vw,34px)">
       <div style="width:64px;height:64px;border-radius:16px;background:#FEF3D3;display:grid;place-items:center;flex:0 0 auto"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7S9 3 6.5 3 4 5 4 5s.5 2 3 2h5zM12 7s3-4 5.5-4S20 5 20 5s-.5 2-3 2h-5z" stroke="#B5760C" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
       <div>
@@ -548,9 +578,23 @@ img,svg,iframe,video{max-width:100%}
 
   
   <!-- QUICK LINKS -->
-  <section data-sec class="wrap" style="position:relative;z-index:2;padding:20px 0 40px">
+  <section data-flow="late" data-sec class="wrap" style="position:relative;z-index:2;padding:20px 0 40px">
     <div data-head style="margin-bottom:22px"><h2 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(28px,4.2vw,48px);letter-spacing:-.035em;line-height:1.04;margin:0">Если узнаёте ситуацию</h2></div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px"><a href="/chitaet-medlenno/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Медленно читает</div><div style="color:#6f6a64;font-size:13.5px">Проверим скорость чтения</div></a><a href="/ne-ponimaet-tekst/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Не понимает текст</div><div style="color:#6f6a64;font-size:13.5px">Проверим понимание и внимание</div></a><a href="/ne-mozhet-pereskazat/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Не может пересказать</div><div style="color:#6f6a64;font-size:13.5px">Научим выделять главное</div></a><a href="/domashka-do-vechera/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Домашка до вечера</div><div style="color:#6f6a64;font-size:13.5px">Поможем учиться быстрее</div></a><a href="/zabyvaet-prochitannoe/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Забывает текст</div><div style="color:#6f6a64;font-size:13.5px">Развиваем память и внимание</div></a><a href="/boitsya-otvechat/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Боится отвечать</div><div style="color:#6f6a64;font-size:13.5px">Поможем стать увереннее</div></a><a href="/oshibki-po-nevnimatelnosti/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Ошибки по вниманию</div><div style="color:#6f6a64;font-size:13.5px">Проверим концентрацию</div></a><a href="/skorochtenie-deti/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Скорочтение детям</div><div style="color:#6f6a64;font-size:13.5px">Диагностика и занятия</div></a></div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px">
+      <a href="/chitaet-medlenno/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Медленно читает</div><div style="color:#6f6a64;font-size:13.5px">Проверим скорость чтения</div></a>
+      <a href="/ne-ponimaet-tekst/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Не понимает текст</div><div style="color:#6f6a64;font-size:13.5px">Проверим понимание и внимание</div></a>
+      <a href="/ne-mozhet-pereskazat/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Не может пересказать</div><div style="color:#6f6a64;font-size:13.5px">Научим выделять главное</div></a>
+      <details class="mobile-details" open data-collapse="narrow">
+        <summary class="mobile-summary">Показать все проблемы</summary>
+        <div class="mobile-extra">
+        <a href="/domashka-do-vechera/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Домашка до вечера</div><div style="color:#6f6a64;font-size:13.5px">Поможем учиться быстрее</div></a>
+        <a href="/zabyvaet-prochitannoe/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Забывает текст</div><div style="color:#6f6a64;font-size:13.5px">Развиваем память и внимание</div></a>
+        <a href="/boitsya-otvechat/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Боится отвечать</div><div style="color:#6f6a64;font-size:13.5px">Поможем стать увереннее</div></a>
+        <a href="/oshibki-po-nevnimatelnosti/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Ошибки по вниманию</div><div style="color:#6f6a64;font-size:13.5px">Проверим концентрацию</div></a>
+        <a href="/skorochtenie-deti/" style="display:block;flex:1 1 240px;background:#FFFDF9;border:1px solid #E4D8C2;border-radius:12px;padding:16px 18px"><div style="font-weight:700;font-size:15px;margin-bottom:4px">Скорочтение детям</div><div style="color:#6f6a64;font-size:13.5px">Диагностика и занятия</div></a>
+        </div>
+      </details>
+    </div>
   </section>
 
   <footer class="wrap" style="position:relative;z-index:2;padding:24px 0 52px">

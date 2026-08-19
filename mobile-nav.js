@@ -76,3 +76,45 @@
     }
   });
 })();
+
+/* Desktop keeps details open so 1100+ layout stays unchanged.
+   On narrow viewports we close extra proof; no new Metrika events. */
+(function () {
+  "use strict";
+  var desktopMq = window.matchMedia("(min-width: 1100px)");
+  var phoneMq = window.matchMedia("(max-width: 768px)");
+
+  function sync() {
+    var desktop = desktopMq.matches;
+    var phone = phoneMq.matches;
+    document.querySelectorAll("details.mobile-details").forEach(function (d) {
+      if (desktop) {
+        d.open = true;
+        return;
+      }
+      if (!phone && d.getAttribute("data-collapse") === "phone") {
+        d.open = true;
+        return;
+      }
+      d.open = false;
+    });
+    document.querySelectorAll("details.faq-item").forEach(function (d, i) {
+      if (desktop) d.open = true;
+      else d.open = i === 0 || d.hasAttribute("data-keep-open");
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", sync);
+  } else {
+    sync();
+  }
+  window.addEventListener("load", sync);
+  if (desktopMq.addEventListener) {
+    desktopMq.addEventListener("change", sync);
+    phoneMq.addEventListener("change", sync);
+  } else {
+    desktopMq.addListener(sync);
+    phoneMq.addListener(sync);
+  }
+})();
