@@ -1,0 +1,198 @@
+/* Shared layout hardening for Kotiksym marketing pages.
+   Loaded last. Overrides inline nowrap / 2-col hero without using overflow-x as a fix. */
+
+.wrap {
+  min-width: 0;
+  max-width: 1180px;
+}
+
+[data-hero-grid] {
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  align-items: start;
+}
+
+[data-hero-grid] > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+[data-h1],
+[data-h1] span,
+#form h2 span,
+[data-diagline] {
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+[data-diagline] {
+  line-height: 1.18;
+  max-width: 100%;
+}
+
+[data-trust] {
+  flex-wrap: wrap;
+}
+
+[data-trust] > span {
+  white-space: normal;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+[data-hero-cta],
+[data-cta] {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+[data-hero-cta] > a,
+[data-cta] > a,
+[data-submit] {
+  white-space: normal;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+[data-formgrid] {
+  min-width: 0;
+}
+
+[data-formgrid] input,
+.form-field {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+[data-photo] {
+  min-width: 0;
+  max-width: 100%;
+}
+
+[data-photo] img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+[data-proof] {
+  min-width: 0;
+  max-width: 100%;
+}
+
+[data-proof] > div {
+  min-width: 0;
+}
+
+[data-price] {
+  overflow-wrap: break-word;
+}
+
+main p,
+main li,
+main a,
+main h1,
+main h2 {
+  overflow-wrap: break-word;
+}
+
+/* Stack hero before the text column becomes narrower than the offer. */
+@media (max-width: 1099px) {
+  [data-hero-grid] {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 28px !important;
+  }
+
+  [data-hero-grid] > :first-child {
+    order: 0;
+  }
+
+  [data-photo] {
+    order: 1;
+    width: 100%;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  [data-offer],
+  [data-contacts] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  [data-pain],
+  [data-why] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  }
+
+  [data-hero-cta] {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 820px) {
+  [data-pain],
+  [data-why],
+  [data-dirs],
+  [data-choose],
+  [data-reviews] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  }
+
+  [data-proof] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  [data-hero-grid],
+  [data-dirs],
+  [data-choose],
+  [data-live],
+  [data-reviews],
+  [data-offer],
+  [data-gallery],
+  [data-contacts],
+  [data-pain],
+  [data-why],
+  [data-diag],
+  [data-ba],
+  [data-proof] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  [data-hero-cta] {
+    flex-direction: column;
+  }
+
+  [data-hero-cta] > a,
+  [data-cta] > a,
+  [data-submit] {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    min-height: 48px;
+  }
+
+  [data-formgrid] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  [data-formgrid] input,
+  [data-submit] {
+    font-size: 16px;
+  }
+
+  [data-proof] > div {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  [data-h1] {
+    font-size: clamp(26px, 7.6vw, 34px);
+    line-height: 1.14;
+  }
+}
