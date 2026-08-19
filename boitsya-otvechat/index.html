@@ -37,7 +37,7 @@
 <style id="mobile-fix">
 /* ===== MOBILE FIX v4 — composition + nav ===== */
 *{box-sizing:border-box}
-html,body{max-width:100%;overflow-x:hidden}
+html,body{max-width:100%}
 img,svg,iframe,video{max-width:100%}
 *{min-width:0}
 [data-nav-actions]{display:flex;align-items:center;gap:8px}
@@ -172,7 +172,7 @@ img,svg,iframe,video{max-width:100%}
 <style>
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;background:#FBF4E8;color:#1C1B29;font-family:"Onest",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{margin:0;background:#FBF4E8;color:#1C1B29;font-family:"Onest",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   ::selection{background:#F5B916;color:#1C1B29}
   a{color:inherit;text-decoration:none}
   input::placeholder{color:#9b9590}
@@ -217,6 +217,7 @@ img,svg,iframe,video{max-width:100%}
     [data-diagline]{font-size:clamp(17px,5vw,22px)!important;white-space:normal!important}
   }
 </style>
+<link rel="stylesheet" href="/responsive.css">
 
 
 <div style="position:relative;overflow:hidden;--accent:#2E6BE0;--curve-op:.95;--grain-op:.5">
@@ -274,11 +275,11 @@ img,svg,iframe,video{max-width:100%}
   <!-- HERO -->
   <section id="top" data-hero class="wrap" style="position:relative;z-index:2;padding:70px 0 54px">
     <div aria-hidden="true" style="position:absolute;inset:-30px -60px -10px;z-index:0;pointer-events:none;background:radial-gradient(150% 96% at 28% 44%, #FBF4E8 56%, rgba(251,244,232,0) 100%)"></div>
-    <div data-hero-grid style="position:relative;z-index:1;display:grid;grid-template-columns:1.08fr .92fr;gap:52px;align-items:center">
+    <div data-hero-grid style="position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:52px;align-items:center">
       <div>
         <span style="display:inline-flex;align-items:center;gap:9px;padding:7px 13px;border:1px solid #DDD0B8;border-radius:8px;font-size:13.5px;font-weight:500;color:#43413c"><span style="width:8px;height:8px;border-radius:50%;background:#2FA96B"></span>Бесплатная диагностика ответа · 40–60&#160;минут</span>
-        <h1 data-h1 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(38px,6vw,68px);line-height:1.02;letter-spacing:-.035em;margin:22px 0 18px;text-wrap:balance">Знает ответ, но <span style="position:relative;white-space:nowrap;color:var(--accent,#2E6BE0)">боится отвечать<svg viewBox="0 0 240 30" preserveAspectRatio="none" style="position:absolute;left:-3%;right:-3%;bottom:-11px;width:106%;height:18px;overflow:visible"><path d="M6 18 C 70 4, 150 28, 234 10" fill="none" stroke="#F5B916" stroke-width="8" stroke-linecap="round" stroke-dasharray="320" stroke-dashoffset="320" style="animation:draw 1.1s .35s ease forwards"/></svg></span>?</h1>
-        <div data-diagline style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(14px,4.1vw,30px);letter-spacing:-.03em;white-space:nowrap;margin:0 0 18px">Первая диагностика&#160;— <span style="color:#E5392E">0&#160;рублей</span></div>
+        <h1 data-h1 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(38px,6vw,68px);line-height:1.02;letter-spacing:-.035em;margin:22px 0 18px;text-wrap:balance">Знает ответ, но <span style="position:relative;white-space:normal;color:var(--accent,#2E6BE0)">боится отвечать<svg viewBox="0 0 240 30" preserveAspectRatio="none" style="position:absolute;left:-3%;right:-3%;bottom:-11px;width:106%;height:18px;overflow:visible"><path d="M6 18 C 70 4, 150 28, 234 10" fill="none" stroke="#F5B916" stroke-width="8" stroke-linecap="round" stroke-dasharray="320" stroke-dashoffset="320" style="animation:draw 1.1s .35s ease forwards"/></svg></span>?</h1>
+        <div data-diagline style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(14px,4.1vw,30px);letter-spacing:-.03em;white-space:normal;margin:0 0 18px">Первая диагностика&#160;— <span style="color:#E5392E">0&#160;рублей</span></div>
         <p style="font-size:18.5px;line-height:1.62;color:#54514b;max-width:47ch;margin:0 0 28px;text-wrap:pretty">Если ребёнок знает тему, но&#160;молчит или отвечает односложно, проверим понимание вопроса, умение собрать мысль и&#160;уверенность в&#160;ответе&#160;— без медицинских формулировок.</p>
         <div data-hero-cta style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px">
           <a href="#form" style="display:inline-flex;align-items:center;padding:15px 26px;border-radius:10px;font-weight:600;font-size:15.5px;color:#fff;background:#E5392E;transition:background .18s" style-hover="background:#cf2f25">Записаться на&#160;бесплатную диагностику</a>
@@ -485,7 +486,7 @@ img,svg,iframe,video{max-width:100%}
         </ul>
       </div>
       <div id="form" style="background:#FFFDF9;border:1px solid #E4D8C2;border-radius:20px;padding:40px">
-        <h2 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(26px,3.2vw,38px);letter-spacing:-.03em;line-height:1.06;margin:0 0 12px">Запишитесь на <span style="position:relative;white-space:nowrap;color:#E5392E">бесплатную диагностику<svg viewBox="0 0 240 30" preserveAspectRatio="none" style="position:absolute;left:-2%;right:-2%;bottom:-9px;width:104%;height:15px;overflow:visible"><path d="M6 18 C 70 4, 150 28, 234 10" fill="none" stroke="#F5B916" stroke-width="7" stroke-linecap="round"/></svg></span></h2>
+        <h2 style="font-family:'Unbounded','Onest',system-ui,-apple-system,sans-serif;font-weight:700;font-size:clamp(26px,3.2vw,38px);letter-spacing:-.03em;line-height:1.06;margin:0 0 12px">Запишитесь на <span style="position:relative;white-space:normal;color:#E5392E">бесплатную диагностику<svg viewBox="0 0 240 30" preserveAspectRatio="none" style="position:absolute;left:-2%;right:-2%;bottom:-9px;width:104%;height:15px;overflow:visible"><path d="M6 18 C 70 4, 150 28, 234 10" fill="none" stroke="#F5B916" stroke-width="7" stroke-linecap="round"/></svg></span></h2>
         <p style="color:#6f6a64;line-height:1.6;font-size:16px;margin:0;text-wrap:pretty">Проверим понимание вопроса и&#160;умение формулировать ответ. Подберём удобное время диагностики.</p>
         <div data-formgrid style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:24px">
           <div class="form-field" data-field="name">
