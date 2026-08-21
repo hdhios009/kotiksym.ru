@@ -26,7 +26,9 @@
     '/angliyskiy-yazyk/': 'Английский язык',
     '/pamyat-i-vnimanie/': 'Память и внимание',
     '/logika-i-myshlenie/': 'Логика и мышление',
-    '/kalligrafiya-gramotnost/': 'Каллиграфия и грамотность'
+    '/kalligrafiya-gramotnost/': 'Каллиграфия и грамотность',
+    '/free-lesson/': 'Бесплатное занятие',
+    '/abonement/': 'Абонемент'
   };
 
   function pick(s) {
@@ -335,10 +337,12 @@
     var n = pick(['#f_name', '[name="Имя"]', '[name="name"]', 'input[placeholder*="Ваше имя"]', 'input[placeholder*="ваше имя"]']);
     var p = pick(['#f_phone', '[name="Телефон"]', '[name="phone"]', 'input[inputMode="tel"]']);
     var a = pick(['#f_age', '[name="Возраст ребёнка"]', '[name="age"]', 'input[placeholder*="Возраст"]']);
+    var d = pick(['#f_direction', '[name="direction"]', 'select[name="direction"]']);
     var attr = resolveAttribution();
     var name = (n ? n.value : '').trim();
     var phone = rawPhone(p ? p.value : '');
     var age = (a ? a.value : '').trim() || '';
+    var direction = (d ? d.value : '').trim() || '';
     var f = {
       name: name,
       phone: phone,
@@ -355,6 +359,10 @@
       gclid: attr.gclid || '',
       website: honeypotValue()
     };
+    if (direction) {
+      f.direction = direction;
+      f['Направление'] = direction;
+    }
     return f;
   }
 
@@ -362,9 +370,11 @@
     var n = document.getElementById('f_name') || pick(['[name="Имя"]', '[name="name"]']);
     var p = document.getElementById('f_phone') || pick(['[name="Телефон"]', 'input[inputMode="tel"]']);
     var a = document.getElementById('f_age') || pick(['[name="Возраст ребёнка"]', 'input[placeholder*="Возраст"]']);
+    var d = document.getElementById('f_direction') || pick(['[name="direction"]']);
     if (n) n.value = '';
     if (p) p.value = '';
     if (a) a.value = '';
+    if (d) d.value = '';
   }
 
   function setBusy(btn, on, origText) {
