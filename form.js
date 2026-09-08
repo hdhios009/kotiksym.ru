@@ -5,7 +5,7 @@
   if (window.__kotiksymFormInit) return;
   window.__kotiksymFormInit = true;
 
-  var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzYaWWeW8TkmvLWDi3ki5lP73cM4XVqWXMtwFti5_5Rk7UcVj2jTNvVGq0QlPljUgkl_A/exec';
+  var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwppaumxbZ9qEaNbZPZgmY96-EaXyJVpGn29BNZurPSMoWqzD3Ey8evs_vj2fnUDyw6Rw/exec';
   var ATTR_KEY = 'kotiksym_attribution';
   var ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid', 'gclid'];
   var TIMEOUT = 18000;
@@ -392,20 +392,31 @@
     }
   }
 
+  function leadOk(data) {
+    if (!data || data.error) return false;
+    if (data.health === true) return false;
+    if (data.message && data.saved !== true && data.duplicate !== true) return false;
+    return data.ok === true || data.success === true;
+  }
+
   function send(fields) {
     var payload = new URLSearchParams();
     Object.keys(fields).forEach(function (k) {
       payload.set(k, fields[k] == null ? '' : String(fields[k]));
     });
+    var qs = payload.toString();
+
+    function readLead(res) {
+      return res.text().then(function (text) {
+        var data = null;
+        try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; }
+        if (res.ok && leadOk(data)) return data;
+        throw new Error('bad_response');
+      });
+    }
 
     var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timer = null;
-    var req = fetch(GAS_ENDPOINT, {
-      method: 'POST',
-      body: payload,
-      signal: controller ? controller.signal : undefined
-    });
-
     var timeoutPromise = new Promise(function (_, reject) {
       timer = setTimeout(function () {
         if (controller) controller.abort();
@@ -413,20 +424,21 @@
       }, TIMEOUT);
     });
 
-    return Promise.race([req, timeoutPromise]).then(function (res) {
+    var getUrl = GAS_ENDPOINT + (GAS_ENDPOINT.indexOf('?') >= 0 ? '&' : '?') + qs;
+    var getReq = fetch(getUrl, {
+      method: 'GET',
+      signal: controller ? controller.signal : undefined
+    }).then(readLead);
+
+    return Promise.race([getReq, timeoutPromise]).then(function (data) {
       clearTimeout(timer);
-      return res.text().then(function (text) {
-        var data = null;
-        try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; }
-        if (res.ok && data && data.ok === true) return data;
-        // Readable non-ok JSON / unexpected body
-        throw new Error('bad_response');
-      });
-    }).catch(function (err) {
+      return data;
+    }).catch(function () {
       clearTimeout(timer);
-      // Opaque / CORS-read failures are unlikely here (endpoint allows CORS),
-      // but if POST reached the server and browser blocks body, treat network-only failures as error.
-      throw err;
+      return fetch(GAS_ENDPOINT, {
+        method: 'POST',
+        body: payload
+      }).then(readLead);
     });
   }
 
