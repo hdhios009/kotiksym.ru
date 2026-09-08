@@ -5,7 +5,7 @@
   if (window.__kotiksymFormInit) return;
   window.__kotiksymFormInit = true;
 
-  var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycby84Y6oEJBSxg2LMXY1rnQ6DNSET0l4fxpiM1I4nXtBasB9sQtoRQQdfBYZyk2zyrDg5w/exec';
+  var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzYaWWeW8TkmvLWDi3ki5lP73cM4XVqWXMtwFti5_5Rk7UcVj2jTNvVGq0QlPljUgkl_A/exec';
   var ATTR_KEY = 'kotiksym_attribution';
   var ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid', 'gclid'];
   var TIMEOUT = 18000;
