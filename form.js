@@ -8,8 +8,14 @@
   var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwppaumxbZ9qEaNbZPZgmY96-EaXyJVpGn29BNZurPSMoWqzD3Ey8evs_vj2fnUDyw6Rw/exec';
   var ATTR_KEY = 'kotiksym_attribution';
   var ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid', 'gclid'];
-  var TIMEOUT = 10000;
-  var RETRY_PLAN = ['GET', 'POST', 'GET', 'POST'];
+  // Google отвечает то за пару секунд, то за полминуты, поэтому первой попытке
+  // даём больше времени, а повторам — меньше, чтобы не затягивать ожидание.
+  var RETRY_PLAN = [
+    { method: 'GET', timeout: 20000 },
+    { method: 'POST', timeout: 14000 },
+    { method: 'GET', timeout: 14000 },
+    { method: 'POST', timeout: 14000 }
+  ];
   var CD = 5000;
   var ERR_MSG = 'Не удалось отправить заявку. Попробуйте ещё раз.';
   var busy = false;
@@ -424,16 +430,16 @@
       });
     }
 
-    function once(method) {
+    function once(step) {
       var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
       var timer = null;
       var timeoutPromise = new Promise(function (_, reject) {
         timer = setTimeout(function () {
           if (controller) controller.abort();
           reject(new Error('timeout'));
-        }, TIMEOUT);
+        }, step.timeout);
       });
-      var req = method === 'POST'
+      var req = step.method === 'POST'
         ? fetch(GAS_ENDPOINT, { method: 'POST', body: payload, signal: controller ? controller.signal : undefined })
         : fetch(getUrl, { method: 'GET', signal: controller ? controller.signal : undefined });
       return Promise.race([req.then(readLead), timeoutPromise]).then(function (data) {
