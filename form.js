@@ -8,7 +8,8 @@
   var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwppaumxbZ9qEaNbZPZgmY96-EaXyJVpGn29BNZurPSMoWqzD3Ey8evs_vj2fnUDyw6Rw/exec';
   var ATTR_KEY = 'kotiksym_attribution';
   var ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid', 'gclid'];
-  var TIMEOUT = 18000;
+  var TIMEOUT = 10000;
+  var RETRY_PLAN = ['GET', 'POST', 'GET', 'POST'];
   var CD = 5000;
   var ERR_MSG = 'Не удалось отправить заявку. Попробуйте ещё раз.';
   var busy = false;
@@ -412,6 +413,7 @@
       payload.set(k, fields[k] == null ? '' : String(fields[k]));
     });
     var qs = payload.toString();
+    var getUrl = GAS_ENDPOINT + (GAS_ENDPOINT.indexOf('?') >= 0 ? '&' : '?') + qs;
 
     function readLead(res) {
       return res.text().then(function (text) {
@@ -422,31 +424,41 @@
       });
     }
 
-    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var timer = null;
-    var timeoutPromise = new Promise(function (_, reject) {
-      timer = setTimeout(function () {
-        if (controller) controller.abort();
-        reject(new Error('timeout'));
-      }, TIMEOUT);
-    });
+    function once(method) {
+      var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      var timer = null;
+      var timeoutPromise = new Promise(function (_, reject) {
+        timer = setTimeout(function () {
+          if (controller) controller.abort();
+          reject(new Error('timeout'));
+        }, TIMEOUT);
+      });
+      var req = method === 'POST'
+        ? fetch(GAS_ENDPOINT, { method: 'POST', body: payload, signal: controller ? controller.signal : undefined })
+        : fetch(getUrl, { method: 'GET', signal: controller ? controller.signal : undefined });
+      return Promise.race([req.then(readLead), timeoutPromise]).then(function (data) {
+        clearTimeout(timer);
+        return data;
+      }, function (err) {
+        clearTimeout(timer);
+        throw err;
+      });
+    }
 
-    var getUrl = GAS_ENDPOINT + (GAS_ENDPOINT.indexOf('?') >= 0 ? '&' : '?') + qs;
-    var getReq = fetch(getUrl, {
-      method: 'GET',
-      signal: controller ? controller.signal : undefined
-    }).then(readLead);
+    // Приёмник отбрасывает повторы одной заявки в течение двух минут,
+    // поэтому повторная отправка не создаёт дублей.
+    function attempt(i) {
+      return once(RETRY_PLAN[i]).catch(function (err) {
+        if (i + 1 >= RETRY_PLAN.length) throw err;
+        return new Promise(function (resolve) {
+          setTimeout(resolve, 700 * (i + 1));
+        }).then(function () {
+          return attempt(i + 1);
+        });
+      });
+    }
 
-    return Promise.race([getReq, timeoutPromise]).then(function (data) {
-      clearTimeout(timer);
-      return data;
-    }).catch(function () {
-      clearTimeout(timer);
-      return fetch(GAS_ENDPOINT, {
-        method: 'POST',
-        body: payload
-      }).then(readLead);
-    });
+    return attempt(0);
   }
 
   function onClick(e) {
