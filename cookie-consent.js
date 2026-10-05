@@ -6,11 +6,13 @@
 
   var script = document.currentScript;
   var YM_ID = parseInt((script && script.getAttribute('data-ym-id')) || '0', 10) || 0;
+  var TMR_ID = ((script && script.getAttribute('data-tmr-id')) || '').replace(/\D/g, '');
   var COOKIE_PAGE = (script && script.getAttribute('data-cookie-page')) || '/cookies/';
   var PRIVACY_PAGE = (script && script.getAttribute('data-privacy-page')) || '/privacy/';
   var ACCENT = (script && script.getAttribute('data-accent')) || '#3B4FE0';
   var KEY = 'pd_cookie_consent_v1';
   var metrikaLoaded = false;
+  var tmrLoaded = false;
 
   function read() {
     try {
@@ -60,6 +62,23 @@
     });
   }
 
+  /** Пиксель VK Рекламы (Top.Mail.Ru). */
+  function loadTopMail() {
+    if (!TMR_ID || tmrLoaded) return;
+    tmrLoaded = true;
+    var tmr = window._tmr || (window._tmr = []);
+    tmr.push({ id: TMR_ID, type: 'pageView', start: (new Date()).getTime() });
+    if (document.getElementById('tmr-code')) return;
+    var node = document.createElement('script');
+    node.type = 'text/javascript';
+    node.async = true;
+    node.id = 'tmr-code';
+    node.src = 'https://top-fwz1.mail.ru/js/code.js';
+    var first = document.getElementsByTagName('script')[0];
+    if (first && first.parentNode) first.parentNode.insertBefore(node, first);
+    else (document.head || document.documentElement).appendChild(node);
+  }
+
   function cookieDomains() {
     var host, labels, list = [''], i;
     try { host = location.hostname.replace(/^www\./, ''); } catch (e) { return list; }
@@ -86,16 +105,43 @@
     }
   }
 
+  function clearTmrData() {
+    var parts = ('; ' + document.cookie).split('; ');
+    var domains = cookieDomains();
+    var i, j, name;
+    for (i = 0; i < parts.length; i++) {
+      name = parts[i].split('=')[0];
+      if (!name || name.indexOf('tmr') !== 0) continue;
+      for (j = 0; j < domains.length; j++) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + domains[j];
+      }
+    }
+    try {
+      Object.keys(localStorage).forEach(function (key) {
+        if (key.indexOf('tmr') === 0 || key.indexOf('_tmr') === 0) localStorage.removeItem(key);
+      });
+    } catch (e) {}
+  }
+
   function apply(state, changed) {
     write(state);
+    var reload = false;
+
     if (state.analytics) {
       loadMetrika();
-    } else if (changed && metrikaLoaded) {
-      clearYmCookies();
-      location.reload();
     } else {
+      if (changed && metrikaLoaded) reload = true;
       clearYmCookies();
     }
+
+    if (state.marketing) {
+      loadTopMail();
+    } else {
+      if (changed && tmrLoaded) reload = true;
+      clearTmrData();
+    }
+
+    if (reload) location.reload();
   }
 
   function el(tag, attrs, children) {
@@ -191,8 +237,12 @@
       card.appendChild(row('Аналитические', 'На этом сайте аналитический счётчик не подключён.', false, true).wrap);
     }
 
-    checkM = row('Рекламные', 'Рекламные и маркетинговые пиксели сейчас не используются. Переключатель оставлен на случай их появления.', marketingOn, false);
-    card.appendChild(checkM.wrap);
+    if (TMR_ID) {
+      checkM = row('Рекламные', 'Пиксель VK Рекламы (Top.Mail.Ru): оценка эффективности рекламы и показ объявлений. Без согласия пиксель не загружается.', marketingOn, false);
+      card.appendChild(checkM.wrap);
+    } else {
+      card.appendChild(row('Рекламные', 'На этом сайте рекламные пиксели не подключены.', false, true).wrap);
+    }
 
     var actions = el('div', {
       css: 'display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:16px;'
@@ -226,8 +276,11 @@
     var card = el('div', {
       css: 'pointer-events:auto;width:min(920px,100%);margin:0 auto;background:#1C1B29;color:#fff;border-radius:16px;padding:18px 18px 16px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;box-sizing:border-box;'
     });
-    var copy = YM_ID
-      ? 'Мы используем необходимые cookie, чтобы форма заявки работала. Яндекс.Метрику и рекламные скрипты подключаем только после согласия. Можно принять всё, оставить только необходимые или настроить отдельно.'
+    var trackers = [];
+    if (YM_ID) trackers.push('Яндекс.Метрику');
+    if (TMR_ID) trackers.push('пиксель VK Рекламы');
+    var copy = trackers.length
+      ? 'Мы используем необходимые cookie, чтобы форма заявки работала. ' + trackers.join(' и ') + ' подключаем только после согласия. Можно принять всё, оставить только необходимые или настроить отдельно.'
       : 'Мы используем необходимые cookie, чтобы форма заявки работала. Аналитические и рекламные скрипты на этом сайте сейчас не подключены. Подробности — в информировании о cookie.';
     card.appendChild(el('div', {
       text: 'Файлы cookie',
@@ -244,7 +297,7 @@
     var necessary = el('button', { type: 'button', text: 'Только необходимые', css: btnStyle(false) });
     var settings = el('button', { type: 'button', text: 'Настроить', css: btnStyle(false) });
     accept.addEventListener('click', function () {
-      apply({ analytics: !!YM_ID, marketing: false }, false);
+      apply({ analytics: !!YM_ID, marketing: !!TMR_ID }, false);
       closeUi();
     });
     necessary.addEventListener('click', function () {
@@ -286,6 +339,11 @@
   } else {
     // Посетители, заходившие до появления баннера, могли получить cookie Метрики.
     clearYmCookies();
+  }
+  if (existing && existing.marketing) {
+    loadTopMail();
+  } else {
+    clearTmrData();
   }
 
   function bootUi() {
