@@ -140,6 +140,7 @@
     showFieldError(form, 'name', '');
     showFieldError(form, 'phone', '');
     showFieldError(form, 'age', '');
+    showFieldError(form, 'consent', '');
   }
 
   function getFieldInput(form, fieldName) {
@@ -456,6 +457,11 @@
 
     clearAllFieldErrors(form);
 
+    var consent = document.getElementById('f_pd_consent');
+    if (consent && !consent.checked) {
+      showFieldError(form, 'consent', 'Отметьте согласие на обработку персональных данных');
+      return;
+    }
     if (name.length < 2) {
       showFieldError(form, 'name', 'Введите имя');
       return;
