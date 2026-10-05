@@ -60,17 +60,27 @@
     });
   }
 
+  function cookieDomains() {
+    var host, labels, list = [''], i;
+    try { host = location.hostname.replace(/^www\./, ''); } catch (e) { return list; }
+    if (!host || /^[\d.]+$/.test(host)) return list;
+    labels = host.split('.');
+    for (i = 0; i + 2 <= labels.length; i++) {
+      list.push('; domain=.' + labels.slice(i).join('.'));
+    }
+    return list;
+  }
+
   function clearYmCookies() {
     var parts = ('; ' + document.cookie).split('; ');
-    var i, name, host;
-    try { host = location.hostname.replace(/^www\./, ''); } catch (e) { host = ''; }
+    var domains = cookieDomains();
+    var i, j, name;
     for (i = 0; i < parts.length; i++) {
       name = parts[i].split('=')[0];
       if (!name) continue;
-      if (name.indexOf('_ym') === 0 || name === 'yabs-sid' || name.indexOf('_ym_') === 0) {
-        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-        if (host) {
-          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.' + host;
+      if (name.indexOf('_ym') === 0 || name === 'yabs-sid' || name === 'yandexuid') {
+        for (j = 0; j < domains.length; j++) {
+          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + domains[j];
         }
       }
     }
@@ -271,7 +281,12 @@
   });
 
   var existing = read();
-  if (existing && existing.analytics) loadMetrika();
+  if (existing && existing.analytics) {
+    loadMetrika();
+  } else {
+    // Посетители, заходившие до появления баннера, могли получить cookie Метрики.
+    clearYmCookies();
+  }
 
   function bootUi() {
     if (!read()) renderBanner();
