@@ -507,8 +507,12 @@
     send(f).then(function () {
       clearInputs();
       clearAllFieldErrors(form);
-      var m = document.getElementById('successModal');
-      if (m) m.style.display = 'grid';
+      if (window.KotiksymGift) {
+        window.KotiksymGift.show();
+      } else {
+        var m = document.getElementById('successModal');
+        if (m) m.style.display = 'grid';
+      }
       if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
       // Keep momentary lock against instant resubmit; then restore button.
       setTimeout(function () {
