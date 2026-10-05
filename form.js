@@ -333,6 +333,11 @@
     return hp ? String(hp.value || '') : '';
   }
 
+  function consentValue() {
+    var c = document.getElementById('f_pd_consent');
+    return c && c.checked ? '1' : '';
+  }
+
   // ── Collect form fields ──
   function collect() {
     var n = pick(['#f_name', '[name="Имя"]', '[name="name"]', 'input[placeholder*="Ваше имя"]', 'input[placeholder*="ваше имя"]']);
@@ -358,7 +363,8 @@
       utm_term: attr.utm_term || '',
       yclid: attr.yclid || '',
       gclid: attr.gclid || '',
-      website: honeypotValue()
+      website: honeypotValue(),
+      pd_consent: consentValue()
     };
     if (direction) {
       f.direction = direction;
