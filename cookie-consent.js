@@ -111,7 +111,7 @@
     var i, j, name;
     for (i = 0; i < parts.length; i++) {
       name = parts[i].split('=')[0];
-      if (!name || name.indexOf('tmr') !== 0) continue;
+      if (!name || (name.indexOf('tmr') !== 0 && name !== 'domain_sid')) continue;
       for (j = 0; j < domains.length; j++) {
         document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + domains[j];
       }
