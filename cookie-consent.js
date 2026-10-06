@@ -5,7 +5,11 @@
   window.__pdCookieConsent = true;
 
   var script = document.currentScript;
-  var YM_ID = parseInt((script && script.getAttribute('data-ym-id')) || '0', 10) || 0;
+  // Можно указать несколько счётчиков через запятую.
+  var YM_IDS = ((script && script.getAttribute('data-ym-id')) || '')
+    .split(',')
+    .map(function (value) { return parseInt(value, 10) || 0; })
+    .filter(function (value) { return value > 0; });
   var TMR_ID = ((script && script.getAttribute('data-tmr-id')) || '').replace(/\D/g, '');
   var COOKIE_PAGE = (script && script.getAttribute('data-cookie-page')) || '/cookies/';
   var PRIVACY_PAGE = (script && script.getAttribute('data-privacy-page')) || '/privacy/';
@@ -38,9 +42,9 @@
   }
 
   function loadMetrika() {
-    if (!YM_ID || metrikaLoaded) return;
+    if (!YM_IDS.length || metrikaLoaded) return;
     metrikaLoaded = true;
-    var src = 'https://mc.yandex.ru/metrika/tag.js?id=' + YM_ID;
+    var src = 'https://mc.yandex.ru/metrika/tag.js?id=' + YM_IDS[0];
     (function (m, e, t, r, i, k, a) {
       m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
       m[i].l = 1 * new Date();
@@ -53,13 +57,15 @@
       k.src = r;
       a.parentNode.insertBefore(k, a);
     })(window, document, 'script', src, 'ym');
-    ym(YM_ID, 'init', {
-      ssr: true,
-      webvisor: true,
-      clickmap: true,
-      accurateTrackBounce: true,
-      trackLinks: true
-    });
+    for (var n = 0; n < YM_IDS.length; n++) {
+      ym(YM_IDS[n], 'init', {
+        ssr: true,
+        webvisor: true,
+        clickmap: true,
+        accurateTrackBounce: true,
+        trackLinks: true
+      });
+    }
   }
 
   /** Пиксель VK Рекламы (Top.Mail.Ru). */
@@ -230,7 +236,7 @@
     nec.input.checked = true;
     card.appendChild(nec.wrap);
 
-    if (YM_ID) {
+    if (YM_IDS.length) {
       checkA = row('Аналитические', 'Яндекс.Метрика: посещения, карта кликов и вебвизор. Без согласия счётчик не загружается.', analyticsOn, false);
       card.appendChild(checkA.wrap);
     } else {
@@ -250,7 +256,7 @@
     var save = el('button', { type: 'button', text: 'Сохранить', css: btnStyle(true) });
     save.addEventListener('click', function () {
       apply({
-        analytics: YM_ID ? !!(checkA && checkA.input.checked) : false,
+        analytics: YM_IDS.length ? !!(checkA && checkA.input.checked) : false,
         marketing: !!(checkM && checkM.input.checked)
       }, true);
       closeUi();
@@ -277,7 +283,7 @@
       css: 'pointer-events:auto;width:min(920px,100%);margin:0 auto;background:#1C1B29;color:#fff;border-radius:16px;padding:18px 18px 16px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;box-sizing:border-box;'
     });
     var trackers = [];
-    if (YM_ID) trackers.push('Яндекс.Метрику');
+    if (YM_IDS.length) trackers.push('Яндекс.Метрику');
     if (TMR_ID) trackers.push('пиксель VK Рекламы');
     var copy = trackers.length
       ? 'Мы используем необходимые cookie, чтобы форма заявки работала. ' + trackers.join(' и ') + ' подключаем только после согласия. Можно принять всё, оставить только необходимые или настроить отдельно.'
@@ -297,7 +303,7 @@
     var necessary = el('button', { type: 'button', text: 'Только необходимые', css: btnStyle(false) });
     var settings = el('button', { type: 'button', text: 'Настроить', css: btnStyle(false) });
     accept.addEventListener('click', function () {
-      apply({ analytics: !!YM_ID, marketing: !!TMR_ID }, false);
+      apply({ analytics: !!YM_IDS.length, marketing: !!TMR_ID }, false);
       closeUi();
     });
     necessary.addEventListener('click', function () {
