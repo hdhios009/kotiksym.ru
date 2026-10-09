@@ -1,8 +1,16 @@
 User-agent: *
 Allow: /
+Disallow: /index.html
+Disallow: /privacy.html
+Disallow: /yandex_
+Disallow: /google2
 
 User-agent: Yandex
 Allow: /
+Disallow: /index.html
+Disallow: /privacy.html
+Disallow: /yandex_
+Disallow: /google2
 Clean-param: etext&utm_source&utm_medium&utm_campaign&utm_content&utm_term&utm_referrer&yclid&ysclid&yrclid&gclid&fbclid&from&erid&_openstat&ymclid
 
 Sitemap: https://kotiksym.ru/sitemap.xml
