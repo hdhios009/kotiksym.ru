@@ -355,12 +355,14 @@
     var phone = rawPhone(p ? p.value : '');
     var age = (a ? a.value : '').trim() || '';
     var direction = (d ? d.value : '').trim() || '';
+    var discountEl = document.querySelector('#f_discount, input[name="Скидка"]');
+    var discount = discountEl ? String(discountEl.value || '').trim() : '';
     var f = {
       name: name,
       phone: phone,
       age: age,
       page_url: window.location.href,
-      page_name: pageName(),
+      page_name: pageName() + (discount ? ' · ' + discount : ''),
       referrer: document.referrer || '',
       utm_source: attr.utm_source || '',
       utm_medium: attr.utm_medium || '',
@@ -370,7 +372,9 @@
       yclid: attr.yclid || '',
       gclid: attr.gclid || '',
       website: honeypotValue(),
-      pd_consent: consentValue()
+      pd_consent: consentValue(),
+      discount: discount,
+      'Скидка': discount
     };
     if (direction) {
       f.direction = direction;
@@ -551,6 +555,7 @@
         if (m) m.style.display = 'grid';
       }
       if (window.ym) ym(110489022, 'reachGoal', 'lead_form_submit');
+      document.dispatchEvent(new CustomEvent('kotiksym-lead-sent'));
       // Keep momentary lock against instant resubmit; then restore button.
       setTimeout(function () {
         setBusy(btn, false, orig);

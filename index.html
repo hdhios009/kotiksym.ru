@@ -24,6 +24,113 @@
 <link rel="icon" type="image/png" sizes="512x512" href="/images/favicon-512.png">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<style id="kg-promotion-style">
+html.kg-open { overflow: hidden; }
+#kg-dialog {
+  position: fixed; inset: 0; margin: auto;
+  width: min(484px, calc(100% - 18px)); max-width: none;
+  max-height: calc(100vh - 18px); max-height: calc(100dvh - 18px);
+  border: 0; padding: 2px 11px 11px 2px; overflow: auto;
+  background: transparent; color: #1C1B29;
+  font: 16px/1.45 'Onest', system-ui, sans-serif; overscroll-behavior: contain;
+}
+#kg-dialog::backdrop { background: rgba(28, 27, 41, .45); backdrop-filter: blur(3px); }
+#kg-dialog [hidden], .kg-header-gift[hidden] { display: none !important; }
+.kg-ticket { position: relative; isolation: isolate; padding: 24px 22px 34px; text-align: center; }
+.kg-ticket-frame { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: visible; }
+.kg-close, .kg-action, .kg-later { font-family: 'Onest', system-ui, sans-serif; cursor: pointer; }
+.kg-close {
+  position: absolute; top: 14px; right: 12px; z-index: 2; width: 44px; height: 44px;
+  display: grid; place-items: center; padding: 0; color: #1C1B29;
+  background: #FFFFFF; border: 2.5px solid #1C1B29; border-radius: 50%; box-shadow: 3px 3px 0 #1C1B29;
+}
+.kg-wheel-area { position: relative; width: min(100%, 300px); margin: 0 auto; }
+.kg-wheel-area::before {
+  content: ''; position: absolute; top: 2.4%; left: 1%; width: 98%; aspect-ratio: 1;
+  border-radius: 50%; background: #1C1B29;
+}
+.kg-hub {
+  position: absolute; top: 48.6%; left: 50%; width: 28.57%; aspect-ratio: 1;
+  transform: translate(-50%, -50%); display: block; padding: 0;
+  border: 0; border-radius: 50%; background: transparent; cursor: pointer;
+}
+.kg-hub:disabled { cursor: default; }
+.kg-hub svg { display: block; width: 100%; height: auto; }
+.kg-rotor {
+  position: relative; width: 100%; aspect-ratio: 1; transform-origin: 50% 50%;
+  transition: transform 4.6s cubic-bezier(.15,.75,.1,1);
+}
+.kg-rotor svg { display: block; width: 100%; height: auto; }
+.kg-pointer {
+  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+  width: 11.4%; height: auto; pointer-events: none;
+}
+.kg-stamp {
+  position: absolute; top: 15%; left: -9%; z-index: 1; display: grid; place-content: center;
+  gap: 3px; width: clamp(58px, 15vw, 82px); aspect-ratio: 1; border-radius: 50%;
+  border: 2.5px solid #1C1B29; background: #F5B916; box-shadow: 3px 4px 0 #1C1B29;
+  transform: rotate(-14deg); font-size: 9px; font-weight: 800; letter-spacing: .04em;
+}
+.kg-stamp strong { font: 700 clamp(11px, 3vw, 16px)/1 'Unbounded','Onest',sans-serif; letter-spacing: -.05em; }
+.kg-copy { position: relative; margin-top: 14px; padding-top: 15px; }
+.kg-copy::before {
+  content: ''; display: block; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: repeating-linear-gradient(90deg, #1C1B29 0 2px, transparent 2px 11px);
+}
+.kg-kicker { display: block; color: #566176; font-size: 10px; font-weight: 800; letter-spacing: .13em; }
+.kg-copy h2 { margin: 8px 0 7px; color: #1C1B29; font: 700 clamp(20px, 5.2vw, 26px)/1.18 'Unbounded','Onest',sans-serif; letter-spacing: -.035em; text-wrap: balance; }
+.kg-copy h2:focus { outline: 0; }
+.kg-copy h2 strong { color: #CE3028; }
+.kg-copy p { margin: 0 auto 12px; max-width: 31em; color: #475268; font-size: 14px; }
+.kg-action {
+  display: block; width: 100%; min-height: 53px; border: 3px solid #1C1B29; border-radius: 14px;
+  padding: 9px 11px; color: #FFFFFF; font-size: 17px; font-weight: 750;
+  background: #CF3028; box-shadow: 0 5px 0 #1C1B29; transition: transform .16s, box-shadow .16s;
+}
+.kg-action--accept { background: #2863D4; }
+.kg-action:not(:disabled):active { transform: translateY(3px); box-shadow: 0 2px 0 #1C1B29; }
+.kg-action:disabled { opacity: .75; cursor: wait; }
+.kg-later {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+  border: 0; background: transparent; color: #475268; margin-top: 6px; padding: 3px 15px;
+  font-size: 14px; font-weight: 650; text-decoration: underline; text-underline-offset: 3px;
+}
+.kg-header-gift {
+  position: relative; display: inline-flex; align-items: stretch; flex: 0 0 auto;
+  min-height: 44px; border: 2.5px solid #1C1B29; border-radius: 12px;
+  box-shadow: 0 3px 0 #1C1B29; color: #1C1B29; text-decoration: none; white-space: nowrap;
+}
+.kg-gift-label, .kg-gift-value { display: flex; align-items: center; padding: 0 10px; }
+.kg-gift-label { gap: 7px; background: #F5B916; border-radius: 9px 0 0 9px; font-size: 14px; font-weight: 750; }
+.kg-gift-label svg { flex: 0 0 19px; width: 19px; }
+.kg-gift-value {
+  background: #CF3028; color: #fff; border-left: 2px dashed #1C1B29; border-radius: 0 9px 9px 0;
+  font: 700 13px/1 'Unbounded','Onest',sans-serif; letter-spacing: -.04em;
+}
+.kg-header-gift::after {
+  content: ''; position: absolute; right: -5px; top: -6px; width: 11px; height: 11px;
+  border: 2px solid #1C1B29; border-radius: 50%; background: #2FA96B; box-sizing: border-box;
+}
+#kg-dialog :is(button,a):focus-visible, .kg-header-gift:focus-visible { outline: 3px solid #2E6BE0; outline-offset: 3px; }
+.kg-discount-note {
+  margin: 0 0 15px; padding: 10px 13px; border: 1px solid #D4E3FC; border-radius: 9px;
+  color: #244B95; background: #F4F8FF; font-size: 14px; font-weight: 650;
+}
+@media (max-width: 1120px) { .kg-gift-label-text { display: none; } }
+@media (max-width: 768px) {
+  html.kg-deferred [data-nav-cta] { display: none !important; }
+  html.kg-deferred [data-mobile-nav] a[data-mobile-cta] { display: flex !important; }
+}
+@media (max-width: 480px) {
+  .kg-ticket { padding: 20px 16px 27px; }
+  .kg-wheel-area { width: min(100%, 66vw, 280px); }
+  .kg-close { top: 8px; right: 7px; }
+  .kg-copy { margin-top: 10px; padding-top: 12px; }
+  .kg-copy p { font-size: 13px; }
+  .kg-action { min-height: 48px; font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .kg-rotor, .kg-action { transition: none; } }
+</style>
 <script src="/cookie-consent.js" data-ym-id="110489022" data-tmr-id="3796520" data-cookie-page="/cookies/" data-privacy-page="/privacy/" data-accent="#3B4FE0"></script>
 <style id="mobile-fix">
 /* ===== MOBILE FIX v4 — composition + nav ===== */
@@ -451,6 +558,10 @@ main h2 {
         <a href="#price" style="transition:.15s" style-hover="color:var(--accent,#2E6BE0)">Стоимость</a>
       </div>
       <div data-nav-actions>
+        <a href="#form" class="kg-header-gift" data-kg-gift hidden aria-label="Получить скидку 10%">
+          <span class="kg-gift-label"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"></rect><path d="M5 12v8h14v-8M12 8v12M12 8S10.5 3.5 8 4.2C6 4.8 6.6 8 12 8ZM12 8s1.5-4.5 4-3.8C18 4.8 17.4 8 12 8Z"></path></svg><span class="kg-gift-label-text">Получить скидку</span></span>
+          <span class="kg-gift-value" data-kg-gift-value>−10%</span>
+        </a>
         <button type="button" data-nav-burger aria-expanded="false" aria-controls="site-mobile-nav" aria-label="Открыть меню"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
         <a href="#form" data-nav-cta style="display:inline-flex;align-items:center;padding:11px 19px;border-radius:10px;font-weight:600;font-size:14.5px;color:#fff;background:var(--accent,#2E6BE0)">Записаться</a>
       </div>
@@ -718,6 +829,65 @@ main h2 {
   });
 })();
 </script>
+<dialog id="kg-dialog" aria-labelledby="kg-spin-title">
+  <div class="kg-ticket">
+    <svg class="kg-ticket-frame" viewBox="-2 -2 578 858" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 280 A280 280 0 0 1 560 280 L560 502 A18 18 0 0 0 560 538 L560 800 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 L0 538 A18 18 0 0 0 0 502 Z" transform="translate(13 13)" fill="#2E6BE0" stroke="#1C1B29" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+      <path d="M0 280 A280 280 0 0 1 560 280 L560 502 A18 18 0 0 0 560 538 L560 800 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 a35 35 0 0 1 -70 0 L0 538 A18 18 0 0 0 0 502 Z" fill="#FFFFFF" stroke="#1C1B29" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+    </svg>
+    <button class="kg-close" type="button" aria-label="Закрыть окно"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path></svg></button>
+    <div class="kg-wheel-area">
+      <div class="kg-rotor"><svg role="img" aria-label="Колесо с подарками: скидки от 5 до 15 процентов" width="420" height="420" viewBox="0 0 420 420">
+<circle cx="210" cy="210" r="206" fill="#F5B916" stroke="#1C1B29" stroke-width="4"></circle>
+<g stroke="#1C1B29" stroke-width="2"><circle cx="210.0" cy="17.0" r="5.5" fill="#FFFDF9"></circle><circle cx="269.6" cy="26.4" r="5.5" fill="#E5392E"></circle><circle cx="323.4" cy="53.9" r="5.5" fill="#FFFDF9"></circle><circle cx="366.1" cy="96.6" r="5.5" fill="#E5392E"></circle><circle cx="393.6" cy="150.4" r="5.5" fill="#FFFDF9"></circle><circle cx="403.0" cy="210.0" r="5.5" fill="#E5392E"></circle><circle cx="393.6" cy="269.6" r="5.5" fill="#FFFDF9"></circle><circle cx="366.1" cy="323.4" r="5.5" fill="#E5392E"></circle><circle cx="323.4" cy="366.1" r="5.5" fill="#FFFDF9"></circle><circle cx="269.6" cy="393.6" r="5.5" fill="#E5392E"></circle><circle cx="210.0" cy="403.0" r="5.5" fill="#FFFDF9"></circle><circle cx="150.4" cy="393.6" r="5.5" fill="#E5392E"></circle><circle cx="96.6" cy="366.1" r="5.5" fill="#FFFDF9"></circle><circle cx="53.9" cy="323.4" r="5.5" fill="#E5392E"></circle><circle cx="26.4" cy="269.6" r="5.5" fill="#FFFDF9"></circle><circle cx="17.0" cy="210.0" r="5.5" fill="#E5392E"></circle><circle cx="26.4" cy="150.4" r="5.5" fill="#FFFDF9"></circle><circle cx="53.9" cy="96.6" r="5.5" fill="#E5392E"></circle><circle cx="96.6" cy="53.9" r="5.5" fill="#FFFDF9"></circle><circle cx="150.4" cy="26.4" r="5.5" fill="#E5392E"></circle></g>
+<circle cx="210" cy="210" r="180" fill="#1C1B29"></circle>
+<g stroke="#1C1B29" stroke-width="2" stroke-linejoin="round">
+<path d="M210 210 L155.6 42.6 A176 176 0 0 1 264.4 42.6 Z" fill="#2E6BE0"></path>
+<path d="M210 210 L264.4 42.6 A176 176 0 0 1 352.4 106.5 Z" fill="#FFFDF9"></path>
+<path d="M210 210 L352.4 106.5 A176 176 0 0 1 386.0 210.0 Z" fill="#E5392E"></path>
+<path d="M210 210 L386.0 210.0 A176 176 0 0 1 352.4 313.5 Z" fill="#FFFDF9"></path>
+<path d="M210 210 L352.4 313.5 A176 176 0 0 1 264.4 377.4 Z" fill="#2FA96B"></path>
+<path d="M210 210 L264.4 377.4 A176 176 0 0 1 155.6 377.4 Z" fill="#FFFDF9"></path>
+<path d="M210 210 L155.6 377.4 A176 176 0 0 1 67.6 313.5 Z" fill="#2E6BE0"></path>
+<path d="M210 210 L67.6 313.5 A176 176 0 0 1 34.0 210.0 Z" fill="#FFFDF9"></path>
+<path d="M210 210 L34.0 210.0 A176 176 0 0 1 67.6 106.5 Z" fill="#E5392E"></path>
+<path d="M210 210 L67.6 106.5 A176 176 0 0 1 155.6 42.6 Z" fill="#FFFDF9"></path>
+</g>
+<circle cx="210" cy="210" r="76" fill="none" stroke="#1C1B29" stroke-width="2.5" stroke-dasharray="3 7" stroke-linecap="round"></circle>
+<g font-family="Unbounded, Onest, sans-serif" font-weight="700" font-size="22" letter-spacing="-0.5">
+<g transform="rotate(0 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#FFFFFF">−10%</text><circle cx="210" cy="140" r="4" fill="#FFFDF9"></circle></g>
+<g transform="rotate(36 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#1C1B29">−5%</text><circle cx="210" cy="140" r="4" fill="#E5392E"></circle></g>
+<g transform="rotate(72 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#FFFFFF">−15%</text><circle cx="210" cy="140" r="4" fill="#FFFDF9"></circle></g>
+<g transform="rotate(108 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#1C1B29">−7%</text><circle cx="210" cy="140" r="4" fill="#E5392E"></circle></g>
+<g transform="rotate(144 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#FFFFFF">−10%</text><circle cx="210" cy="140" r="4" fill="#FFFDF9"></circle></g>
+<g transform="rotate(180 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#1C1B29">−12%</text><circle cx="210" cy="140" r="4" fill="#E5392E"></circle></g>
+<g transform="rotate(216 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#FFFFFF">−5%</text><circle cx="210" cy="140" r="4" fill="#FFFDF9"></circle></g>
+<g transform="rotate(252 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#1C1B29">−10%</text><circle cx="210" cy="140" r="4" fill="#E5392E"></circle></g>
+<g transform="rotate(288 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#FFFFFF">−7%</text><circle cx="210" cy="140" r="4" fill="#FFFDF9"></circle></g>
+<g transform="rotate(324 210 210)"><text x="210" y="52" transform="rotate(90 210 52)" dominant-baseline="central" fill="#1C1B29">−15%</text><circle cx="210" cy="140" r="4" fill="#E5392E"></circle></g>
+</g>
+</svg></div>
+      <svg class="kg-pointer" viewBox="0 0 48 62" aria-hidden="true"><path d="M24 58 L7 24 A18.5 18.5 0 1 1 41 24 Z" fill="#E5392E" stroke="#1C1B29" stroke-width="3" stroke-linejoin="round"></path><circle cx="24" cy="19" r="6.5" fill="#FFFFFF" stroke="#1C1B29" stroke-width="2.5"></circle></svg>
+      <button class="kg-hub" type="button" aria-label="Крутить колесо" data-kg-hub><svg aria-hidden="true" width="120" height="120" viewBox="0 0 120 120"><path d="M26 54 L32 12 L58 34 Z" fill="#F5B916" stroke="#1C1B29" stroke-width="3.5" stroke-linejoin="round"></path><path d="M94 54 L88 12 L62 34 Z" fill="#F5B916" stroke="#1C1B29" stroke-width="3.5" stroke-linejoin="round"></path><circle cx="60" cy="66" r="40" fill="#FFFDF9" stroke="#1C1B29" stroke-width="4"></circle><ellipse cx="46" cy="61" rx="4.5" ry="6" fill="#1C1B29"></ellipse><ellipse cx="74" cy="61" rx="4.5" ry="6" fill="#1C1B29"></ellipse><circle cx="36" cy="77" r="5.5" fill="#F0C7C2"></circle><circle cx="84" cy="77" r="5.5" fill="#F0C7C2"></circle><path d="M55 73 H65 L60 79 Z" fill="#E5392E" stroke="#1C1B29" stroke-width="2" stroke-linejoin="round"></path><path d="M60 79 q-4 6 -9 2 M60 79 q4 6 9 2" fill="none" stroke="#1C1B29" stroke-width="2.5" stroke-linecap="round"></path><path d="M14 68 H30 M16 78 L30 75 M106 68 H90 M104 78 L90 75" stroke="#1C1B29" stroke-width="2.5" stroke-linecap="round"></path></svg></button>
+      <div class="kg-stamp" aria-hidden="true">ПОДАРОК<strong>до −15%</strong></div>
+    </div>
+    <div class="kg-copy">
+      <span class="kg-kicker">ПОДАРОК ОТ КОТИКСУМ</span>
+      <div data-kg-spin-view>
+        <h2 id="kg-spin-title" tabindex="-1">Крутите колесо —<br>заберите скидку</h2>
+        <p>Один поворот — и скидка на первый абонемент ваша.</p>
+        <button class="kg-action" type="button" data-kg-spin>Крутить колесо</button>
+      </div>
+      <div data-kg-result-view hidden>
+        <h2 id="kg-result-title" tabindex="-1">Ваш подарок —<br>скидка <strong data-kg-result-value></strong></h2>
+        <p>Укажем эту скидку на первый абонемент в вашей заявке.</p>
+        <button class="kg-action kg-action--accept" type="button" data-kg-accept>Записаться со скидкой</button>
+        <button class="kg-later" type="button" data-kg-later>Не сейчас</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+<script src="/wheel.js"></script>
 <script src="/mobile-nav.js"></script>
 <script src="/analytics.js"></script>
   <script src="/gift.js" data-gift-url="https://drive.google.com/drive/folders/1tscaJg5__cIWqI_4mU_y8J8jGLXpgEdo?usp=sharing" data-channel-url="https://max.ru/channel_KotiksYM_Tushino" data-channel-label="Перейти в наш канал МАКС" data-accent="#3B4FE0" data-logo="/favicon-120.png" data-title="Заявка принята. Заберите подарок" data-text="Мы свяжемся с вами по указанному номеру. А подарок уже готов — заберите его прямо сейчас."></script>
