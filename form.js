@@ -8,13 +8,6 @@
   var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwppaumxbZ9qEaNbZPZgmY96-EaXyJVpGn29BNZurPSMoWqzD3Ey8evs_vj2fnUDyw6Rw/exec';
   var ATTR_KEY = 'kotiksym_attribution';
   var ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid', 'gclid'];
-  // Эти запросы нужны только для подтверждения: саму заявку браузер уже отправил.
-  // Поэтому ждём недолго и не мучаем человека длинным «Отправляем…».
-  var RETRY_PLAN = [
-    { method: 'GET', timeout: 14000 },
-    { method: 'POST', timeout: 10000 },
-    { method: 'GET', timeout: 10000 }
-  ];
   var CD = 5000;
   var ERR_MSG = 'Не удалось отправить заявку. Попробуйте ещё раз.';
   var busy = false;
@@ -360,7 +353,7 @@
     var percentMatch = discount.match(/(\d+)\s*%/);
     var leadDiscount = percentMatch ? ('Скидка ' + percentMatch[1] + '%') : '';
     var f = {
-      name: name,
+      name: leadDiscount ? (leadDiscount + ' — ' + name) : name,
       phone: phone,
       age: age,
       page_url: window.location.href,
@@ -458,52 +451,8 @@
       });
     }
 
-    // Google периодически отвечает дольше минуты или отдаёт свою страницу ошибки.
-    // Поэтому заявку сначала передаём браузеру «вслепую»: доставку он берёт на себя,
-    // а читать ответ для этого не нужно.
-    function deliverBlind() {
-      try {
-        if (typeof fetch === 'function') {
-          fetch(getUrl, {
-            method: 'GET',
-            mode: 'no-cors',
-            keepalive: true,
-            cache: 'no-store'
-          })['catch'](function () {});
-          return true;
-        }
-      } catch (e) {}
-      try {
-        return !!(navigator.sendBeacon && navigator.sendBeacon(GAS_ENDPOINT, payload));
-      } catch (e) {}
-      return false;
-    }
-
-    // Приёмник помечает заявку до записи в таблицу и отбрасывает повторы
-    // в течение двух минут, поэтому следующие запросы не создают дублей,
-    // а лишь подтверждают доставку.
-    function attempt(i) {
-      return once(RETRY_PLAN[i]).catch(function (err) {
-        if (i + 1 >= RETRY_PLAN.length) throw err;
-        return new Promise(function (resolve) {
-          setTimeout(resolve, 700 * (i + 1));
-        }).then(function () {
-          return attempt(i + 1);
-        });
-      });
-    }
-
-    var blind = deliverBlind();
-
-    return new Promise(function (resolve) {
-      setTimeout(resolve, blind ? 1200 : 0);
-    }).then(function () {
-      return attempt(0);
-    })['catch'](function (err) {
-      // Подтверждения нет, но заявку уже забрал браузер — она дойдёт.
-      if (blind) return { ok: true, success: true, saved: true, blind: true };
-      throw err;
-    });
+    // Один запрос. Второй уходил, пока первый ещё не отметился, и письмо приходило дважды.
+    return once({ method: 'GET', timeout: 20000 });
   }
 
   function onClick(e) {
