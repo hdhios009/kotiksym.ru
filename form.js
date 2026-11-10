@@ -357,12 +357,16 @@
     var direction = (d ? d.value : '').trim() || '';
     var discountEl = document.querySelector('#f_discount, input[name="Скидка"]');
     var discount = discountEl ? String(discountEl.value || '').trim() : '';
+    var percentMatch = discount.match(/(\d+)\s*%/);
+    var leadDiscount = percentMatch ? ('Скидка ' + percentMatch[1] + '%') : '';
     var f = {
       name: name,
       phone: phone,
       age: age,
       page_url: window.location.href,
-      page_name: pageName() + (discount ? ' · ' + discount : ''),
+      page_name: leadDiscount ? (leadDiscount + ' · ' + pageName()) : pageName(),
+      comment: leadDiscount ? (leadDiscount + ' на первый абонемент') : '',
+      message: leadDiscount ? (leadDiscount + ' на первый абонемент') : '',
       referrer: document.referrer || '',
       utm_source: attr.utm_source || '',
       utm_medium: attr.utm_medium || '',

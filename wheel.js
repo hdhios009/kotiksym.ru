@@ -92,10 +92,9 @@
       note = document.createElement('p');
       note.className = 'kg-discount-note';
       note.setAttribute('data-kg-discount-note', '');
-      if (grid === form) form.prepend(note);
-      else grid.before(note);
+      form.insertBefore(note, form.firstChild);
     }
-    note.textContent = 'В заявку добавлена скидка ' + state.prize + '% на первый абонемент.';
+    note.textContent = 'Скидка ' + state.prize + '%';
   }
 
   function clearDiscount() {
